@@ -115,6 +115,12 @@ export const ARRIVAL = {
    * about two thirds through, as though something passed in front of it.
    */
   video: { mp4: "/media/b1-barn-arrival.mp4", width: 1600, height: 892 },
+  /**
+   * Seconds. Once the doors are open and the light is out, the tail loops from
+   * here. Looping the whole clip would shut them again, and — as with §01's
+   * bus — a door that opens is a one-way event. It does not undo itself.
+   */
+  loopFrom: 7.4,
   alt: "A black-painted wooden barn alone in a dead field at night. Fog to the knees. One upper window is lit.",
 } as const;
 

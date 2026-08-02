@@ -44,7 +44,6 @@ const MAX_RATE = 3.8;
 export function TheRoad() {
   const sectionRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const logRef = useRef<HTMLDivElement>(null);
   const mediaRef = useRef<HTMLDivElement>(null);
   const progressRef = useRef<HTMLDivElement>(null);
 
@@ -144,13 +143,6 @@ export function TheRoad() {
         progressRef.current.style.width = `${target * 100}%`;
       }
 
-      // §03 parallax — the log rides against the footage at a different rate,
-      // which is what keeps it reading as an overlay on the world rather than
-      // part of it.
-      if (logRef.current) {
-        logRef.current.style.transform = `translateY(${(0.5 - target) * 90}px)`;
-      }
-
       frame = requestAnimationFrame(tick);
     };
 
@@ -161,7 +153,11 @@ export function TheRoad() {
     };
   }, [motionAllowed, nearby]);
 
-  const currentIndex = LOG.reduce((acc, entry, i) => (progress >= entry.at ? i : acc), -1);
+  // The most recent marker the ride has passed.
+  const current = LOG.reduce<(typeof LOG)[number] | null>(
+    (acc, entry) => (progress >= entry.at ? entry : acc),
+    null,
+  );
 
   return (
     <section id="the-road" ref={sectionRef} className={styles.road} aria-label="The road">
@@ -208,22 +204,28 @@ export function TheRoad() {
           <div ref={progressRef} className={styles.progressFill} />
         </div>
 
-        <div ref={logRef} className={styles.log}>
-          {LOG.map((entry, i) => (
-            <p
-              key={entry.time}
-              className={cn(
-                "t-record",
-                styles.entry,
-                progress >= entry.at && styles.entryShown,
-                i === currentIndex && styles.entryCurrent,
-              )}
-            >
-              <span className={styles.time}>{entry.time}</span>
-              <span>{entry.text}</span>
-            </p>
-          ))}
-        </div>
+        {current ? (
+          <>
+            <div className={styles.markerGround} />
+            <div className={styles.marker}>
+              {/* Keyed on the marker so the arrival animation replays each
+                  time the ride passes another one. */}
+              <p
+                key={`${current.time}-t`}
+                className={cn("t-signage", styles.markerTime, styles.markerIn)}
+              >
+                {current.time}
+              </p>
+              <p
+                key={`${current.time}-x`}
+                className={cn("t-record", styles.markerText, styles.markerIn)}
+              >
+                {current.text}
+              </p>
+            </div>
+          </>
+        ) : null}
+
       </div>
     </section>
   );

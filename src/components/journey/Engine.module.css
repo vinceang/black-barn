@@ -1,29 +1,53 @@
 /*
  * §3.2.7 — "a persistent, beautiful toggle in the corner".
  * §5.2 / §5.5 — copy: TURN ON THE ENGINE / THE ENGINE IS RUNNING.
+ *
+ * Persistent, but not competing. On a phone the labelled pill was the only lit
+ * object on a black screen, which made the site look as though its primary
+ * action were to enable audio — above the actual CTA, and impossible to
+ * ignore. So the label is desktop-only; touch gets a bare dot with an
+ * accessible name, which is available without ever asking to be looked at.
  */
 
-/*
- * Top-right on phones. The bottom edge belongs to §01's CTA and the cookie
- * bar; a third fixed element down there guarantees a collision on a 430px
- * screen. It returns to the corner on anything wider.
- */
 .engine {
   position: fixed;
   right: 1rem;
   top: 1rem;
   bottom: auto;
   z-index: 70;
-  display: flex;
-  align-items: center;
-  gap: 0.7rem;
-  padding: 0.7rem 1rem;
-  background-color: color-mix(in srgb, var(--color-void) 78%, transparent);
-  border: 1px solid var(--color-soot);
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  border-radius: 50%;
+  background-color: color-mix(in srgb, var(--color-void) 55%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-bone) 18%, transparent);
   color: var(--color-bone);
   cursor: pointer;
-  backdrop-filter: blur(6px);
-  transition: border-color var(--dur-cta) var(--ease-barn);
+  backdrop-filter: blur(4px);
+  transition:
+    border-color var(--dur-cta) var(--ease-barn),
+    opacity var(--dur-cta) var(--ease-barn);
+  /* Present, not addressed to you. */
+  opacity: 0.5;
+}
+
+.engine:hover,
+.engine:focus-visible {
+  opacity: 1;
+  border-color: var(--color-rust);
+}
+
+/* The label exists for assistive tech at every size; it is only drawn on
+   pointer devices, where there is room and no CTA beneath it. */
+.label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 @media (min-width: 48rem) {
@@ -31,27 +55,46 @@
     right: 2rem;
     top: auto;
     bottom: 2rem;
+    width: auto;
+    height: auto;
+    border-radius: 0;
+    padding: 0.7rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    background-color: color-mix(in srgb, var(--color-void) 78%, transparent);
+    border-color: var(--color-soot);
+    opacity: 0.68;
+  }
+
+  .label {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip-path: none;
   }
 }
 
-.engine:hover,
-.engine:focus-visible {
-  border-color: var(--color-rust);
-}
-
 /*
- * The indicator is a bare dot: unlit when off, an ember bloom when running.
+ * The indicator: unlit when off, an ember bloom when running.
  * §2.4 prohibits drop shadows — this is a light source, so it blooms.
  */
 .dot {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background-color: var(--color-soot);
+  background-color: color-mix(in srgb, var(--color-bone) 40%, transparent);
   flex: none;
   transition:
     background-color var(--dur-base) var(--ease-barn),
     box-shadow var(--dur-base) var(--ease-barn);
+}
+
+.running {
+  opacity: 1;
+  color: var(--color-tallow);
+  border-color: var(--color-rust);
 }
 
 .running .dot {
@@ -61,12 +104,7 @@
     0 0 16px color-mix(in srgb, var(--color-ember) 45%, transparent);
 }
 
-.running {
-  color: var(--color-tallow);
-  border-color: var(--color-rust);
-}
-
-/* The engine idles. So does its label. */
+/* The engine idles. So does its indicator. */
 @media (prefers-reduced-motion: no-preference) {
   .running .dot {
     animation: engine-idle 2.6s ease-in-out infinite alternate;

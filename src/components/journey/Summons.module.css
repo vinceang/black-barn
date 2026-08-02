@@ -3,6 +3,12 @@
  * "Void. No image. Just enormous Invitation type, revealed line by line on
  * scroll, each line arriving with a 240ms delay like someone deciding whether
  * to tell you."
+ *
+ * The first build did exactly that and stopped there — the lines arrived once
+ * and then the section was a static page of text for the rest of its height,
+ * which is a long time to look at nothing happening. Three things move now:
+ * the lines travel at different rates as the section passes, the mark behind
+ * them turns, and the signal noise rises with scroll speed.
  */
 
 .summons {
@@ -12,6 +18,7 @@
   align-content: center;
   padding: 8rem 1.5rem;
   background-color: var(--color-void);
+  overflow: hidden;
 }
 
 @media (min-width: 48rem) {
@@ -20,14 +27,46 @@
   }
 }
 
+/*
+ * The Broken Hex, enormous and nearly invisible, turning about once every two
+ * minutes. It should never be caught moving — only noticed to have moved.
+ */
+.mark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(150vh, 120vw);
+  height: auto;
+  translate: -50% -50%;
+  color: var(--color-tallow);
+  opacity: 0.055;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .mark {
+    animation: mark-turn 120s linear infinite;
+  }
+}
+
+@keyframes mark-turn {
+  from {
+    rotate: 0deg;
+  }
+  to {
+    rotate: 360deg;
+  }
+}
+
 .lines {
-  /* Above the signal layer, which sits at z-index 0 behind everything. */
+  /* Above the signal layer and the mark, both of which sit at z-index 0. */
   position: relative;
   z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: start;
-  gap: 0.85em;
+  gap: 0.6em;
 }
 
 /*
@@ -37,22 +76,20 @@
  * word per line.
  */
 .line {
-  font-size: var(--text-section);
+  font-size: clamp(2.75rem, 8.5vw, 7rem);
   margin: 0;
-  max-width: 20ch;
+  max-width: 18ch;
+  will-change: transform;
 }
 
 /*
  * §02 — "That last line in Record, small, tucked under. The tonal shift from
  * Invitation to Record is the scare."
- *
- * Tucked, so it sits closer than the line spacing above it and indents to the
- * measure of the paragraph rather than the page — it reads as an annotation
- * somebody added afterwards, not as the next thing being said.
  */
 .aside {
-  margin-top: 2.5rem;
+  margin-top: 3rem;
   padding-left: 0.15em;
+  will-change: transform;
 }
 
 /* ------------------------------------------------------------ the reveal -- */
@@ -60,27 +97,28 @@
 @media (prefers-reduced-motion: no-preference) {
   .hidden {
     opacity: 0;
-    transform: translateY(0.35em);
   }
 
   .shown {
     opacity: 1;
-    transform: translateY(0);
-    transition:
-      opacity var(--dur-base) var(--ease-barn),
-      transform var(--dur-base) var(--ease-barn);
+    transition: opacity var(--dur-base) var(--ease-barn);
   }
 }
 
 /*
  * §3.4 — under reduced motion this section is already its finished state:
- * full copy, full size, nothing withheld. The only thing lost is the pause
- * before each line, which is a performance, not information.
+ * full copy, full size, nothing withheld. What is lost is the pause before
+ * each line, which is a performance, not information.
  */
 @media (prefers-reduced-motion: reduce) {
   .hidden,
   .shown {
     opacity: 1;
-    transform: none;
+    transform: none !important;
+  }
+
+  .line,
+  .aside {
+    transform: none !important;
   }
 }

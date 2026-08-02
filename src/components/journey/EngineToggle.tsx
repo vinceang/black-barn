@@ -70,7 +70,7 @@ export function EngineToggle() {
       aria-pressed={running}
     >
       <span className={styles.dot} aria-hidden="true" />
-      <span>{running ? ON : OFF}</span>
+      <span className={styles.label}>{running ? ON : OFF}</span>
     </button>
   );
 }

@@ -3,32 +3,24 @@
  * "This is the site's one moment of stillness — 40vh of pure void above the
  * image and below it, so the barn arrives in silence."
  *
- * The void is the design. Nothing may be put in it.
+ * The void is kept, but shorter, and the plate is now full bleed. As a
+ * letterboxed band with 80vh of nothing around it the section had the silence
+ * and none of the arrival — the barn was a small picture of a barn. Filling
+ * the screen is what makes it a place you have been driven to.
+ *
+ * The camera still does not move. Stillness is the composition, not the size.
  */
 
 .arrival {
   position: relative;
   background-color: var(--color-void);
-  /* 40vh of nothing, the barn, 40vh of nothing. */
-  padding-block: 40vh;
+  padding-block: 14vh;
 }
 
-/*
- * Capped to the viewport so the barn can be taken in whole. At its natural
- * 16:9 the plate is fractionally taller than a laptop viewport, which means
- * the roof is always cut off — a reveal you can never quite see is not a
- * reveal. The crop this introduces is biased downward, since the top of the
- * frame is the empty sky §2.5 asked for and the bottom carries the fog.
- */
 .plate {
   position: relative;
   width: 100%;
-  /*
-   * On a phone `50vw` is ~215px, which reduced the reveal to a letterbox
-   * strip. The cap only exists to stop the plate towering on a wide desktop,
-   * so it is applied there and the phone gets viewport height instead.
-   */
-  height: 62dvh;
+  height: 100dvh;
   overflow: clip;
   isolation: isolate;
 }
@@ -37,7 +29,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 50% 68%;
+  object-position: 50% 62%;
   display: block;
 }
 
@@ -58,26 +50,20 @@
  * §2.3 — the Broken Hex, "painted large and faded on the black boards".
  *
  * Overlaid as live vector rather than baked into the plate: it stays crisp at
- * every size, it can be positioned against the boards without a re-render, and
- * critically it is the *drawn* mark rather than whatever a generative pass
- * invents. Soft-light plus low opacity is what makes it sit in the wood
- * instead of on top of it — §2.4 prohibits drop shadows, and a painted mark
- * that floats is the same mistake.
+ * every size and it is the *drawn* mark rather than whatever a generative pass
+ * invents. Screen, not soft-light — soft-light preserves the underlying
+ * luminance, so on boards this dark it resolves to nothing at any usable
+ * opacity. Screen lifts, which is what whitewash on black wood actually does.
  */
 .hex {
   position: absolute;
-  top: 52%;
-  left: 56%;
+  top: 46%;
+  left: 54%;
   transform: translate(-50%, -50%);
-  width: clamp(7rem, 17vw, 15rem);
+  width: clamp(8rem, 20vw, 20rem);
   height: auto;
   color: var(--color-tallow);
-  /*
-   * Screen, not soft-light. Soft-light preserves the underlying luminance,
-   * so on boards this dark it resolves to nothing at any opacity worth using.
-   * Screen lifts, which is what whitewash on black wood actually does.
-   */
-  opacity: 0.2;
+  opacity: 0.16;
   mix-blend-mode: screen;
   pointer-events: none;
   z-index: 2;
@@ -89,28 +75,26 @@
   z-index: 3;
   pointer-events: none;
   /* The plate has to dissolve into the void rather than end at a hard edge —
-     it is bordered by 40vh of nothing on both sides, and a visible seam would
-     turn the silence into a picture frame. */
+     a visible seam would turn the silence into a picture frame. */
   background:
-    linear-gradient(to bottom, var(--color-void) 0%, transparent 26%),
-    linear-gradient(to top, var(--color-void) 0%, transparent 42%);
+    linear-gradient(to bottom, var(--color-void) 0%, transparent 20%),
+    linear-gradient(to top, var(--color-void) 0%, transparent 36%);
 }
 
 /*
  * §04 — "No copy for the first 60% of the section. Then, small, centered."
- * The line sits in the lower void, alone, at Record size.
+ * Laid over the plate now rather than dropped into the void beneath it, so the
+ * line lands on the barn instead of on an empty screen after it.
  */
 .line {
-  display: block;
-  margin: 6rem auto 0;
+  position: absolute;
+  z-index: 4;
+  left: 50%;
+  bottom: clamp(4rem, 12vh, 8rem);
+  translate: -50% 0;
   text-align: center;
   opacity: 0;
-}
-
-@media (min-width: 48rem) {
-  .plate {
-    height: min(72dvh, 50vw);
-  }
+  --record-size: 0.875rem;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -128,9 +112,13 @@
     opacity: 1;
   }
 
-  /* Without the scroll there is no 60% to wait for, and 80vh of empty screen
-     buys nothing when nothing is going to arrive into it. */
+  /* Without the scroll there is no 60% to wait for, and a screen of empty
+     space buys nothing when nothing is going to arrive into it. */
   .arrival {
-    padding-block: 18vh;
+    padding-block: 8vh;
+  }
+
+  .plate {
+    height: 70dvh;
   }
 }

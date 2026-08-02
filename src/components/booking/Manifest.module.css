@@ -70,7 +70,10 @@
   height: 26rem;
   overflow-y: auto;
   overscroll-behavior: contain;
-  scrollbar-width: thin;
+  /* Hidden. A visible bar advertises a control, and while the drift was
+     overwriting scrollTop that control appeared broken. The list is still
+     scrollable by wheel, drag, touch and keyboard. */
+  scrollbar-width: none;
   mask-image: linear-gradient(
     to bottom,
     transparent 0,
@@ -78,6 +81,10 @@
     #000 calc(100% - 2.5rem),
     transparent 100%
   );
+}
+
+.scroller::-webkit-scrollbar {
+  display: none;
 }
 
 .rows {

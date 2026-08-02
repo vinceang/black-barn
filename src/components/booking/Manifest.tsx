@@ -86,9 +86,17 @@ export function Manifest({
   }, [departureId]);
 
   /*
-   * §07 — "a live, slowly auto-scrolling list". Driven here rather than by a
-   * CSS animation so that any real scroll gesture takes it over immediately;
-   * an animated transform would fight the user for control of the list.
+   * §07 — "a live, slowly auto-scrolling list".
+   *
+   * The hard part is not the scrolling, it is yielding. A loop that assigns
+   * scrollTop every frame overwrites whatever the reader just did, so any
+   * attempt to scroll the list is undone within 16ms and the control fights
+   * back. That shipped, and it was unusable.
+   *
+   * So the drift yields on any sign of a human: hover or focus holds it
+   * indefinitely, and a wheel, drag or touch hands control over for a few
+   * seconds after the last input. Hover alone is not enough — a phone has no
+   * hover, which is exactly where the fight was worst.
    */
   useEffect(() => {
     const node = scrollerRef.current;
@@ -96,34 +104,67 @@ export function Manifest({
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     let raf = 0;
-    let paused = false;
+    let hovering = false;
+    let yieldUntil = 0;
     let offset = node.scrollTop;
 
-    const hold = () => (paused = true);
-    const release = () => (paused = false);
+    const hold = () => {
+      hovering = true;
+    };
+    const release = () => {
+      hovering = false;
+      offset = node.scrollTop;
+    };
+    /** Hand control over, and take it back only after they have stopped. */
+    const yieldControl = () => {
+      yieldUntil = performance.now() + 3500;
+    };
+
     node.addEventListener("pointerenter", hold);
     node.addEventListener("pointerleave", release);
     node.addEventListener("focusin", hold);
     node.addEventListener("focusout", release);
+    node.addEventListener("wheel", yieldControl, { passive: true });
+    node.addEventListener("touchstart", yieldControl, { passive: true });
+    node.addEventListener("touchmove", yieldControl, { passive: true });
+    node.addEventListener("pointerdown", yieldControl);
+
+    // Only drift while the sheet is actually on screen.
+    let visible = false;
+    const observer = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      if (visible) offset = node.scrollTop;
+    });
+    observer.observe(node);
 
     const tick = () => {
-      if (!paused) {
-        offset += 0.28; // slow enough to read, fast enough to notice
-        if (offset >= node.scrollHeight - node.clientHeight) offset = 0;
-        node.scrollTop = offset;
-      } else {
+      const yielded = hovering || performance.now() < yieldUntil || !visible;
+
+      if (yielded) {
+        // Track where they left it, so resuming does not jump.
         offset = node.scrollTop;
+      } else {
+        offset += 0.28; // slow enough to read, fast enough to notice
+        const max = node.scrollHeight - node.clientHeight;
+        if (offset >= max) offset = 0;
+        node.scrollTop = offset;
       }
+
       raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
 
     return () => {
       cancelAnimationFrame(raf);
+      observer.disconnect();
       node.removeEventListener("pointerenter", hold);
       node.removeEventListener("pointerleave", release);
       node.removeEventListener("focusin", hold);
       node.removeEventListener("focusout", release);
+      node.removeEventListener("wheel", yieldControl);
+      node.removeEventListener("touchstart", yieldControl);
+      node.removeEventListener("touchmove", yieldControl);
+      node.removeEventListener("pointerdown", yieldControl);
     };
   }, [seats]);
 

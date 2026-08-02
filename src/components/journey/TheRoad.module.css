@@ -75,77 +75,79 @@
     linear-gradient(to top, var(--color-void) 2%, transparent 34%);
 }
 
-/* ------------------------------------------------------------------ log -- */
+/* --------------------------------------------------------------- marker -- */
 
 /*
- * §03 — "Overlaid at intervals, Record type, small, left-aligned like a log."
- * The log accumulates rather than replacing itself, so by the time the bus
- * arrives the whole itinerary is on screen and reads as one document.
+ * §03 puts the log "small, left-aligned like a log" in the corner. Built that
+ * way it carried the entire emotional weight of the section in 12px of type
+ * that most people never looked at, and the ride read as scenery. The marker
+ * is now the focal point: the time large and centred, the line beneath it.
+ *
+ * The times move to Signage, which §2.2 assigns to "wayfinding, tier names,
+ * dates, prices" — a timestamp on a journey is wayfinding, and Record is
+ * capped at 14px precisely so it can never take a position like this.
  */
-.log {
+.marker {
   position: absolute;
   z-index: 4;
-  left: 1.5rem;
-  bottom: 2.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-  margin: 0;
-  padding: 1.1rem 1.4rem 1.1rem 1.1rem;
-  /* The log sits on headlight-lit gravel as often as on black. Without a
-     ground of its own it disappears exactly where the footage is brightest. */
-  background-color: color-mix(in srgb, var(--color-void) 62%, transparent);
-  backdrop-filter: blur(3px);
-  will-change: transform;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  display: grid;
+  justify-items: center;
+  gap: 1.1rem;
+  text-align: center;
+  width: min(90vw, 40rem);
+  pointer-events: none;
 }
 
-@media (min-width: 48rem) {
-  .log {
-    left: 4rem;
-    bottom: 4rem;
-    gap: 0.95rem;
-    padding: 1.4rem 2rem 1.4rem 1.5rem;
-  }
+/* The road is brightest exactly where the marker sits. */
+.markerGround {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  width: min(120vw, 60rem);
+  height: min(70vh, 28rem);
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    color-mix(in srgb, var(--color-void) 82%, transparent) 0%,
+    color-mix(in srgb, var(--color-void) 55%, transparent) 45%,
+    transparent 72%
+  );
 }
 
-.entry {
-  display: flex;
-  gap: 1.25rem;
-  align-items: baseline;
+.markerTime {
+  font-size: clamp(3.5rem, 13vw, 9rem);
+  line-height: 0.85;
+  color: var(--color-tallow);
+  font-variant-numeric: tabular-nums;
   margin: 0;
-  opacity: 0;
+}
+
+.markerText {
+  margin: 0;
   color: var(--color-bone);
-  --record-size: 0.8125rem;
+  --record-size: 0.875rem;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .entry {
-    transform: translateY(0.5em) translateX(-0.75rem);
-    transition:
-      opacity var(--dur-base) var(--ease-barn),
-      transform var(--dur-base) var(--ease-barn),
-      color var(--dur-base) var(--ease-barn);
+  .markerIn {
+    animation: marker-arrive var(--dur-base) var(--ease-barn) both;
   }
 }
 
-.entryShown {
-  opacity: 0.62;
-  transform: translateY(0) translateX(0);
-}
-
-/* The entry the bus has most recently passed. */
-.entryCurrent {
-  opacity: 1;
-  color: var(--color-tallow);
-}
-
-.time {
-  font-variant-numeric: tabular-nums;
-  min-width: 5ch;
-}
-
-.entryCurrent .time {
-  color: var(--color-ember);
+@keyframes marker-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(0.4em);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ------------------------------------------------------------- progress -- */
@@ -196,20 +198,17 @@
     transform: none !important;
   }
 
-  .entry,
-  .entryShown,
-  .entryCurrent {
-    opacity: 1;
-    transform: none;
-    color: var(--color-bone);
-  }
-
-  .log {
+  .marker {
     position: relative;
     left: auto;
-    bottom: auto;
-    margin: 2rem 1.5rem 4rem;
+    top: auto;
+    translate: none;
+    margin: 2rem auto 4rem;
     align-self: end;
+  }
+
+  .markerGround {
+    display: none;
   }
 
   .progress {

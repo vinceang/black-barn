@@ -7,6 +7,7 @@ import { TheRoad } from "./TheRoad";
 import { Arrival } from "./Arrival";
 import { TheRite } from "./TheRite";
 import { Phenomena } from "./Phenomena";
+import { Rail } from "./Rail";
 import { Cursor } from "./Cursor";
 import { EngineToggle } from "./EngineToggle";
 import { motion } from "@/lib/tokens.generated";
@@ -68,6 +69,7 @@ export function Journey({ thresholdLine, eyebrow }: { thresholdLine: string; eye
       </main>
 
       {/* §3.2.4–6, §3.3, §3.2.7 — the layers that sit over everything. */}
+      <Rail />
       <Phenomena />
       <Cursor />
       <EngineToggle />

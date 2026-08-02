@@ -58,8 +58,20 @@ export function Arrival() {
     const reveal = () => setVideoReady(true);
     if (video.readyState >= 2) reveal();
     video.addEventListener("loadeddata", reveal, { once: true });
+
+    // The doors are a one-way event. Fall back to the tail, where they are
+    // already open, rather than starting over and slamming them shut.
+    const onEnded = () => {
+      video.currentTime = ARRIVAL.loopFrom;
+      void video.play().catch(() => {});
+    };
+    video.addEventListener("ended", onEnded);
+
     void video.play().catch(() => {});
-    return () => video.removeEventListener("loadeddata", reveal);
+    return () => {
+      video.removeEventListener("loadeddata", reveal);
+      video.removeEventListener("ended", onEnded);
+    };
   }, [motionAllowed, nearby]);
 
   useEffect(() => {
@@ -109,7 +121,6 @@ export function Arrival() {
             width={ARRIVAL.video.width}
             height={ARRIVAL.video.height}
             muted
-            loop
             playsInline
             preload="auto"
             aria-hidden="true"
