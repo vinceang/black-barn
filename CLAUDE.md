@@ -10,12 +10,21 @@ The full creative direction lives in `docs/creative-direction.md`. It is the sou
 
 ## Stack
 
-- Next.js (App Router), TypeScript
+- Astro (static output) + TypeScript, React only inside islands
 - Lenis (smooth scroll) + GSAP ScrollTrigger (scroll orchestration)
 - OGL or Three.js for the headlight mask + grain shader — lazy-loaded after LCP
 - Tailwind, configured from `tokens/design-tokens.json`. No arbitrary hex values in components.
 - Video via Mux or Cloudflare Stream, with an AVIF frame-sequence fallback path
-- Vercel
+- Vercel (`@astrojs/vercel`)
+
+### Island rules
+
+- **`§01–§05` is ONE `client:load` island** (`components/journey/Journey.tsx`), not five.
+  Do not fragment the scroll timeline across islands — they hydrate at different
+  times against a single timeline.
+- Call `ScrollTrigger.refresh()` after hydration. Islands settle late;
+  ScrollTrigger measures early. See the seam comment in `Journey.tsx`.
+- `§06–§07` are separate islands and may exceed the JS budget.
 
 ## Build order
 
@@ -33,7 +42,11 @@ Follow this sequence. Do not build sections out of order — each one depends on
 
 - **`prefers-reduced-motion` is a second design, not a fallback.** Build it in the same commit as the animated version, never afterward. It must be beautiful: stills, large type, full copy.
 - **No autoplaying audio.** Sound is opt-in via the `TURN ON THE ENGINE` toggle.
-- Total JS budget: **180KB gzipped**. LCP under 2.5s on 4G.
+- **Performance.** The metrics are the constraint, not a byte count:
+  - Reference device: mid-tier Android (Moto G Power class), 4G throttled.
+  - **LCP < 2.5s · INP < 200ms · TBT < 300ms.**
+  - Per-route first-load JS: `§01–§05` ≤ **200KB gz**. `§06–§07` may exceed.
+  - Record the First Load JS number in each PR (`npm run build && npm run budget`).
 - Full keyboard nav with a visible `ember` focus ring. FAQ and ticketing are semantic HTML, screen-reader complete.
 - Every image and video gets the shared grain overlay at 6–9%, screen blend. One plate, used everywhere.
 - iOS Safari is the primary risk surface. Test scroll-scrub and `playsinline` video there early and often.

@@ -1,0 +1,64 @@
+/*
+ * §3.2.4 THE SPLICE and §3.2.5 THE BLINK.
+ * Two full-viewport overlays that exist only for a handful of frames each.
+ */
+
+.layer {
+  position: fixed;
+  inset: 0;
+  z-index: 95;
+  pointer-events: none;
+}
+
+/*
+ * §3.2.4 — "Sections don't fade. They cut: 2 frames of pure void, one frame
+ * of overexposed ember bloom, then the new section. Like a projector. 84ms
+ * total."
+ *
+ * The ember frame is a bloom, not a flash: a warm centre falling off to void,
+ * at partial opacity. A full-screen jump to peak brightness for one frame is
+ * a strobe, and §5.4.08 already tells people with photosensitivity to stay
+ * off the bus — the website should not be the thing that catches them.
+ */
+.splice {
+  background-color: var(--color-void);
+  animation: splice var(--dur-splice) steps(1, end) 1 both;
+}
+
+@keyframes splice {
+  0% {
+    background-color: var(--color-void);
+    opacity: 1;
+  }
+  /* Two frames of void, then one of bloom. 2/3 of 84ms. */
+  66% {
+    background-color: var(--color-void);
+    opacity: 1;
+  }
+  67% {
+    background-color: color-mix(in srgb, var(--color-ember) 34%, var(--color-void));
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/*
+ * §3.2.5 — "the viewport goes fully black for 130ms. When it returns, one
+ * element has changed... Never acknowledged."
+ */
+.blink {
+  background-color: var(--color-void);
+  animation: blink var(--dur-blink) steps(1, end) 1 both;
+}
+
+@keyframes blink {
+  0%,
+  99% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}

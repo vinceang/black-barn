@@ -1,0 +1,410 @@
+/* ==========================================================================
+   §08–§10 — the document sections.
+   Static markup, zero JS. §09's accordion is <details>, which is semantic,
+   keyboard-operable and screen-reader complete before a line of script.
+   ========================================================================== */
+
+@layer components {
+  /* ---------------------------------------------------- §08 RECOVERED --- */
+
+  .recovered {
+    background-color: var(--color-void);
+    padding: 8rem 1.5rem;
+  }
+
+  .recovered__inner {
+    max-width: 78rem;
+    margin: 0 auto;
+  }
+
+  .recovered__eyebrow {
+    color: var(--color-bone);
+    margin: 0 0 3rem;
+  }
+
+  /*
+   * §08 — "Mixed formats deliberately." The grid is masonry-ish columns so
+   * portrait, square and landscape items sit at their own sizes instead of
+   * being forced into a uniform tile, which is what makes it read as a
+   * folder of collected material rather than a gallery.
+   */
+  .recovered__grid {
+    columns: 2 14rem;
+    column-gap: 1.5rem;
+  }
+
+  @media (min-width: 62rem) {
+    .recovered__grid {
+      columns: 3 18rem;
+      column-gap: 2.5rem;
+    }
+  }
+
+  .recovered__item {
+    break-inside: avoid;
+    margin: 0 0 2.5rem;
+  }
+
+  .recovered__frame {
+    position: relative;
+    background-color: var(--color-ash);
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .recovered__img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .recovered__caption {
+    display: block;
+    margin-top: 0.75rem;
+    color: var(--color-bone);
+  }
+
+  .recovered__note {
+    margin: 3rem 0 0;
+    color: var(--color-bone);
+    opacity: 0.55;
+  }
+
+  /* ---------------------------------------------------- §09 QUESTIONS --- */
+
+  .questions {
+    background-color: var(--color-void);
+    padding: 8rem 1.5rem;
+  }
+
+  /*
+   * §2.4 xerox: "Toner speckle, one degree of rotation, a fold shadow."
+   * §09: "Presented as a xeroxed internal document."
+   */
+  .questions__sheet {
+    max-width: 52rem;
+    margin: 0 auto;
+    background-color: var(--color-ash);
+    border: 1px solid var(--color-soot);
+    padding: 3rem 1.5rem;
+    transform: rotate(var(--xerox-rotation));
+    position: relative;
+  }
+
+  @media (min-width: 48rem) {
+    .questions__sheet {
+      padding: 4rem 4rem 5rem;
+    }
+  }
+
+  /* The fold. A sheet that has been carried somewhere folded in half. */
+  .questions__sheet::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(
+      to bottom,
+      transparent 46%,
+      color-mix(in srgb, var(--color-void) 22%, transparent) 50%,
+      transparent 54%
+    );
+  }
+
+  .questions__header {
+    color: var(--color-bone);
+    margin: 0 0 3rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--color-soot);
+    /* §2.2 caps the Record role at 14px; the header earns the ceiling. */
+    --record-size: 0.8125rem;
+  }
+
+  .questions__item {
+    border-bottom: 1px solid var(--color-soot);
+  }
+
+  .questions__q {
+    display: grid;
+    grid-template-columns: 3rem 1fr;
+    gap: 0.5rem;
+    align-items: baseline;
+    padding: 1.35rem 0;
+    cursor: pointer;
+    color: var(--color-tallow);
+    list-style: none;
+  }
+
+  .questions__q::-webkit-details-marker {
+    display: none;
+  }
+
+  .questions__q:hover,
+  .questions__item[open] .questions__q {
+    color: var(--color-tallow);
+  }
+
+  /* §09 — "question numbers in the margin". */
+  .questions__n {
+    color: var(--color-rust);
+  }
+
+  .questions__a {
+    padding: 0 0 1.75rem 3.5rem;
+    margin: 0;
+    color: var(--color-bone);
+    max-width: 60ch;
+    line-height: 1.75;
+  }
+
+  /*
+   * §09 — "the panels open with a paper-unfolding motion rather than a slide."
+   * Unfolding is rotation about the top edge, not height. Height animation is
+   * the slide the brief is ruling out.
+   */
+  @media (prefers-reduced-motion: no-preference) {
+    .questions__item[open] .questions__a {
+      transform-origin: top center;
+      animation: unfold var(--dur-base) var(--ease-barn) both;
+    }
+  }
+
+  @keyframes unfold {
+    from {
+      opacity: 0;
+      transform: perspective(800px) rotateX(-72deg);
+    }
+    to {
+      opacity: 1;
+      transform: perspective(800px) rotateX(0deg);
+    }
+  }
+
+  /* ------------------------------------------------------- §10 NOTICE --- */
+
+  .notice {
+    position: relative;
+    background-color: var(--color-void);
+    border-top: 1px solid var(--color-soot);
+    padding: 8rem 1.5rem 5rem;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  @media (min-width: 48rem) {
+    .notice {
+      padding: 9rem 4rem 5rem;
+    }
+  }
+
+  /* §10 — "Broken hex, large, low-opacity." */
+  .notice__hex {
+    position: absolute;
+    right: -6rem;
+    bottom: -8rem;
+    width: min(34rem, 60vw);
+    height: auto;
+    color: var(--color-tallow);
+    opacity: 0.045;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .notice__inner {
+    position: relative;
+    z-index: 1;
+    max-width: 78rem;
+    margin: 0 auto;
+  }
+
+  .notice__grid {
+    display: grid;
+    gap: 2.5rem 3rem;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    padding-bottom: 5rem;
+    border-bottom: 1px solid var(--color-soot);
+  }
+
+  .notice__block dt {
+    color: var(--color-rust);
+    margin-bottom: 0.6rem;
+  }
+
+  .notice__block dd {
+    color: var(--color-bone);
+    margin: 0;
+    max-width: 34ch;
+    line-height: 1.7;
+  }
+
+  /* §10 — "Then a final line in Invitation, alone." */
+  .notice__final {
+    margin: 5rem 0 0;
+    font-size: clamp(1.5rem, 3.4vw, 2.75rem);
+    max-width: 20ch;
+  }
+
+  .notice__meta {
+    margin: 4rem 0 0;
+    color: var(--color-bone);
+    opacity: 0.5;
+  }
+}
+
+/* ==========================================================================
+   §5.5 the cookie notice · §5.5/§8 the newsletter capture
+   ========================================================================== */
+
+@layer components {
+  /*
+   * Stacked above the engine toggle on the right, not bottom-left: §01 puts
+   * the primary CTA in the lower-left third, and a consent box landing on top
+   * of "CLAIM A SEAT" is the one place a notice must never be.
+   */
+  .cookie {
+    position: fixed;
+    right: 2rem;
+    bottom: 5.75rem;
+    z-index: 75;
+    max-width: 22rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem 1rem;
+    padding: 0.9rem 1.1rem;
+    background-color: color-mix(in srgb, var(--color-void) 88%, transparent);
+    border: 1px solid var(--color-soot);
+    backdrop-filter: blur(6px);
+  }
+
+  /* Clears the engine toggle on narrow screens rather than stacking on it. */
+  /*
+   * On a phone there is no corner free: §01 puts the CTA bottom-left and the
+   * engine toggle sits bottom-right, so a floating card lands on top of the
+   * hero's headline and its only button. It becomes a bar flush to the bottom
+   * edge instead, and the hero reserves room for it.
+   */
+  @media (max-width: 47.99rem) {
+    .cookie {
+      left: 0;
+      right: 0;
+      bottom: 0;
+      max-width: none;
+      border-inline: 0;
+      border-bottom: 0;
+      padding: 0.85rem 1.25rem calc(0.85rem + env(safe-area-inset-bottom));
+      justify-content: space-between;
+    }
+  }
+
+  .cookie__line {
+    margin: 0;
+    color: var(--color-bone);
+  }
+
+  .cookie__actions {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+  }
+
+  .cookie__button {
+    background: none;
+    border: 0;
+    padding: 0;
+    color: var(--color-tallow);
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 0.35em;
+  }
+
+  .cookie__button:hover {
+    color: var(--color-ember);
+  }
+
+  .cookie__slash {
+    color: var(--color-soot);
+  }
+
+  /* ------------------------------------------------------- newsletter --- */
+
+  .notice__signup {
+    margin: 4rem 0 0;
+    max-width: 32rem;
+  }
+
+  .notice__signupLabel {
+    display: block;
+    color: var(--color-rust);
+    margin-bottom: 1rem;
+  }
+
+  .notice__signupRow {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-end;
+  }
+
+  .notice__signupField {
+    position: relative;
+    flex: 1;
+  }
+
+  .notice__input {
+    width: 100%;
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid var(--color-soot);
+    padding: 0.6rem 0 0.7rem;
+    color: var(--color-tallow);
+    font-family: var(--font-record);
+    font-size: 0.9375rem;
+    letter-spacing: var(--tracking-record);
+    outline: none;
+  }
+
+  /* §3.3 — the rule ignites from left to right in ember. */
+  .notice__signupField::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 1px;
+    width: 100%;
+    background-color: var(--color-ember);
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform var(--dur-base) var(--ease-barn);
+  }
+
+  .notice__signupField:focus-within::after {
+    transform: scaleX(1);
+  }
+
+  .notice__submit {
+    flex: none;
+    padding: 0.7rem 1.4rem;
+    color: var(--color-tallow);
+    background: transparent;
+    border: 1px solid var(--color-rust);
+    cursor: pointer;
+    transition: border-color var(--dur-cta) var(--ease-barn);
+  }
+
+  .notice__submit:hover,
+  .notice__submit:focus-visible {
+    border-color: var(--color-ember);
+  }
+
+  .notice__error {
+    margin: 0.9rem 0 0;
+    color: var(--color-oxblood);
+    filter: brightness(1.9);
+  }
+
+  .notice__signed {
+    margin: 4rem 0 0;
+    color: var(--color-bone);
+    max-width: 32rem;
+  }
+}

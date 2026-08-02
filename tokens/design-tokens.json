@@ -30,6 +30,10 @@
       "role": "display serif — hero lines, section titles, the voice of the Barn",
       "licensed": ["Canela Deck", "GT Sectra Fine", "Ogg"],
       "open": ["Instrument Serif", "Newsreader"],
+      "selected": "Instrument Serif",
+      "selectedProse": "Newsreader Variable",
+      "selectedComment": "§2.2 lists two open faces for this role. Instrument Serif carries display (hero, section titles); Newsreader carries long-form, per tokens.type.body mapping to the invitation role.",
+      "fallback": "Georgia, 'Times New Roman', serif",
       "case": "sentence",
       "tracking": "-0.03em",
       "leading": "0.88"
@@ -38,12 +42,19 @@
       "role": "condensed heavy sans — wayfinding, tiers, dates, prices, buttons",
       "licensed": ["Druk Condensed", "Grtsk Peta", "Compressa"],
       "open": ["Archivo Narrow Black", "Anton"],
+      "selected": "Archivo Variable",
+      "selectedComment": "Archivo variable carries a wdth axis (62–125) and reaches wght 900; Archivo Narrow tops out at 700. The wdth build exposes the axis as standard font-stretch, so the role is set with stretch + weight rather than font-variation-settings.",
+      "stretch": "62%",
+      "weight": 900,
+      "fallback": "'Arial Narrow', sans-serif",
       "case": "uppercase"
     },
     "record": {
       "role": "typewriter mono — FAQ, waivers, timestamps, seat numbers, form labels, errors",
       "licensed": ["Pitch", "ABC Diatype Mono"],
       "open": ["Courier Prime", "Martian Mono"],
+      "selected": "Courier Prime",
+      "fallback": "'Courier New', monospace",
       "maxSize": "14px",
       "tracking": "0.06em",
       "color": "bone"

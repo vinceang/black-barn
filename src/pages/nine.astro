@@ -1,0 +1,37 @@
+---
+/**
+ * §8 — THE NINTH SEAT.
+ *
+ * "Discoverable only through the headlight cursor on §05." The route exists
+ * now; hiding the way in is a change to how §06 links here, not to this page.
+ *
+ * Not indexed. A page you are supposed to have found.
+ */
+import Base from "../layouts/Base.astro";
+import { NinthSeat } from "../components/NinthSeat";
+import { BrokenHex } from "../components/BrokenHex";
+import { Grain } from "../components/texture/Grain";
+---
+
+<Base
+  title="The Ninth Seat"
+  description="One per departure. It is not sold. It is offered."
+  noindex
+>
+  <main class="plain nine">
+    <BrokenHex size="auto" className="nine__hex" />
+
+    <p class="t-record plain__eyebrow">ONE PER DEPARTURE</p>
+    <h1 class="t-invitation plain__title">The Ninth Seat.</h1>
+    <p class="t-record plain__body">
+      It is not sold. It is offered. You will not be told how the decision is made, and it
+      is not made by the person reading this.
+    </p>
+
+    <NinthSeat client:load />
+
+    <a class="t-record plain__body" href="/" style="margin-top:2rem">return to the lot</a>
+  </main>
+
+  <Grain variant="global" />
+</Base>

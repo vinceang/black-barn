@@ -1,0 +1,210 @@
+/*
+ * §05 THE RITE
+ * "Three chambers presented as a horizontal-scroll (desktop) / snap-carousel
+ * (mobile) sequence. Suddenly, symmetrical composition."
+ *
+ * FULL BLEED. Each chamber is one whole screen of image with the type laid
+ * over it. Earlier versions floated a portrait card in a field of black, which
+ * threw away the only three symmetrical images in the package and made the
+ * most cinematic section the quietest thing on the site.
+ *
+ * The plates are 3:4 and the panels are landscape, so they are centre-cropped.
+ * That is safe here and nowhere else: these are the one-point-perspective
+ * shots, so the centre column holds the vanishing point, the aisle and the
+ * candles — everything the composition is actually about (§2.5).
+ */
+
+.rite {
+  position: relative;
+  background-color: var(--color-void);
+}
+
+.heading {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------------- track -- */
+
+.track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+
+.track::-webkit-scrollbar {
+  display: none;
+}
+
+.chamber {
+  position: relative;
+  flex: 0 0 100vw;
+  height: 100dvh;
+  scroll-snap-align: center;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+@media (min-width: 48rem) {
+  .rite {
+    height: 340vh;
+  }
+
+  .viewport {
+    position: sticky;
+    top: 0;
+    height: 100dvh;
+    overflow: clip;
+  }
+
+  /*
+   * The track must be as wide as its three chambers and must NOT clip — it
+   * inherits overflow-x from the mobile carousel, and `hidden` here makes it
+   * clip its own children so chambers II and III vanish. .viewport clips.
+   */
+  .track {
+    width: max-content;
+    overflow: visible;
+    scroll-snap-type: none;
+    will-change: transform;
+  }
+}
+
+/* --------------------------------------------------------------- plates -- */
+
+.plate {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /*
+   * Biased low. These are one-point-perspective shots whose subject — the
+   * shoes, the chairs, the aisle — sits in the lower half of a 3:4 frame, so
+   * a centre crop to landscape throws away the thing the image is of.
+   */
+  object-position: 50% 60%;
+  display: block;
+  /* Overscaled so the parallax offset never exposes an edge. */
+  scale: 1.12;
+  will-change: transform;
+}
+
+/*
+ * The type has to sit on something. Without this the Record line lands on
+ * candlelight and disappears — the same failure the road log had.
+ */
+.scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    linear-gradient(to top, var(--color-void) 8%, color-mix(in srgb, var(--color-void) 55%, transparent) 34%, transparent 62%),
+    radial-gradient(ellipse 130% 80% at 50% 38%, transparent 38%, var(--color-void) 100%);
+}
+
+/* ----------------------------------------------------------------- type -- */
+
+.caption {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(5rem, 13vh, 9rem);
+  translate: -50% 0;
+  z-index: 3;
+  width: min(90vw, 46rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  text-align: center;
+}
+
+.numeral {
+  font-size: 0.875rem;
+  letter-spacing: 0.4em;
+  /* Optical: letter-spacing adds a trailing gap that breaks centring. */
+  text-indent: 0.4em;
+  color: var(--color-rust);
+}
+
+/* Full bleed earns display scale. */
+.title {
+  font-size: clamp(2.5rem, 7vw, 6rem);
+  text-wrap: balance;
+  margin: 0;
+}
+
+.line {
+  max-width: 40ch;
+  margin: 0;
+  --record-size: 0.8125rem;
+}
+
+/* ------------------------------------------------------------- the rail -- */
+
+.rail {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 1.25rem;
+  align-items: center;
+  z-index: 4;
+}
+
+.rung {
+  width: 2.5rem;
+  height: 1px;
+  background-color: color-mix(in srgb, var(--color-bone) 30%, transparent);
+  transition: background-color var(--dur-base) var(--ease-barn);
+}
+
+.rungActive {
+  background-color: var(--color-ember);
+}
+
+/* ------------------------------------------------------- reduced motion -- */
+
+/*
+ * §3.4 — a second design. No pin, no translate, no held scroll: three
+ * full-bleed stills stacked and read in order. Nothing is withheld, and the
+ * images are the same size they are everywhere else.
+ */
+@media (prefers-reduced-motion: reduce) and (min-width: 48rem) {
+  .rite {
+    height: auto;
+  }
+
+  .viewport {
+    position: relative;
+    height: auto;
+    overflow: visible;
+  }
+
+  .track {
+    flex-direction: column;
+    width: auto;
+    transform: none !important;
+  }
+
+  .image {
+    scale: 1;
+    transform: none !important;
+  }
+
+  .rail {
+    display: none;
+  }
+}

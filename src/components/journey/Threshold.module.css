@@ -1,0 +1,43 @@
+/*
+ * §00 THE THRESHOLD
+ * "Black screen. A single line of Record type, centered. Two seconds. Then the
+ * hero doesn't fade in — it cuts in, hard, mid-motion. No logo animation. No
+ * loading bar. The absence of a normal preloader is the first signal that this
+ * site is not like other sites."
+ */
+
+.threshold {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  background-color: var(--color-void);
+  /* No transition, no fade-out. It cuts. */
+}
+
+.line {
+  /* Sits fractionally above centre — optically centred reads as centred. */
+  transform: translateY(-0.5em);
+  color: var(--color-bone);
+  white-space: nowrap;
+}
+
+/*
+ * The one concession to motion: the line arrives rather than being present,
+ * so the first thing the site does is hold something back. 240ms, then still.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .line {
+    animation: threshold-arrive 240ms var(--ease-barn) both;
+  }
+}
+
+@keyframes threshold-arrive {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

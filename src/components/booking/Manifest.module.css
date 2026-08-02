@@ -1,0 +1,321 @@
+/*
+ * §07 THE MANIFEST — "The most important social mechanic on the site."
+ * Presented as a document (§2.4 xerox): Record type throughout, toner
+ * speckle, a fold, a fraction of a degree off square.
+ */
+
+.manifest {
+  position: relative;
+  background-color: var(--color-void);
+  padding: 6rem 1.5rem 8rem;
+}
+
+@media (min-width: 48rem) {
+  .manifest {
+    padding: 8rem 4rem 10rem;
+  }
+}
+
+.inner {
+  max-width: 78rem;
+  margin: 0 auto;
+  display: grid;
+  gap: 4rem;
+}
+
+@media (min-width: 62rem) {
+  .inner {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 5rem;
+  }
+}
+
+.eyebrow {
+  color: var(--color-bone);
+  margin: 0 0 1.5rem;
+}
+
+/* ------------------------------------------------------------- the list -- */
+
+/* §2.4 — the xerox treatment. Documents only. */
+.sheet {
+  position: relative;
+  background-color: var(--color-ash);
+  border: 1px solid var(--color-soot);
+  padding: 1.5rem 1.25rem;
+  transform: rotate(calc(var(--xerox-rotation) * -1));
+  overflow: hidden;
+}
+
+.sheet::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  /* The fold. One crease down the sheet, catching a little light. */
+  background: linear-gradient(
+    to right,
+    transparent 48%,
+    color-mix(in srgb, var(--color-tallow) 5%, transparent) 50%,
+    transparent 52%
+  );
+}
+
+/*
+ * The list is longer than the sheet, so its edges are masked rather than cut.
+ * A hard edge slices a row in half and reads as a clipping bug; a fade reads
+ * as a document continuing past the window you are reading it through.
+ */
+.scroller {
+  height: 26rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    #000 2.5rem,
+    #000 calc(100% - 2.5rem),
+    transparent 100%
+  );
+}
+
+.rows {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 5.5rem 1fr auto;
+  gap: 0.75rem;
+  align-items: baseline;
+  padding: 0.3rem 0.25rem;
+  color: var(--color-bone);
+}
+
+.seat {
+  color: var(--color-bone);
+  font-variant-numeric: tabular-nums;
+}
+
+.name {
+  color: var(--color-tallow);
+  text-transform: uppercase;
+}
+
+.state {
+  color: var(--color-rust);
+}
+
+.rowAvailable .name {
+  color: var(--color-bone);
+  opacity: 0.5;
+}
+
+/*
+ * §7.4 — "SEAT 07 — OCCUPIED. A five-character detail, never explained, on
+ * every departure." It is styled no differently from any other claimed row.
+ * Drawing attention to it would answer the question.
+ */
+.rowOccupied .name {
+  color: var(--color-tallow);
+}
+
+.empty {
+  color: var(--color-bone);
+  padding: 2rem 0.25rem;
+  margin: 0;
+}
+
+/* ------------------------------------------------------------- the form -- */
+
+.form {
+  display: grid;
+  gap: 2.5rem;
+  align-content: start;
+}
+
+.field {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.label {
+  color: var(--color-bone);
+}
+
+/*
+ * §3.3 — "Form fields are Record type on a hairline rule. On focus, the rule
+ * ignites from left to right in ember."
+ */
+.inputWrap {
+  position: relative;
+}
+
+.input,
+.textarea {
+  width: 100%;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--color-soot);
+  padding: 0.65rem 0 0.7rem;
+  color: var(--color-tallow);
+  font-family: var(--font-record);
+  font-size: 0.9375rem;
+  letter-spacing: var(--tracking-record);
+  outline: none;
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 5rem;
+  line-height: 1.7;
+}
+
+.input::placeholder,
+.textarea::placeholder {
+  color: var(--color-bone);
+  opacity: 0.4;
+}
+
+.inputWrap::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 1px;
+  width: 100%;
+  background-color: var(--color-ember);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--dur-base) var(--ease-barn);
+}
+
+.inputWrap:focus-within::after {
+  transform: scaleX(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .inputWrap::after {
+    transition: none;
+  }
+}
+
+.hint {
+  color: var(--color-bone);
+  opacity: 0.55;
+}
+
+.error {
+  color: var(--color-oxblood);
+  /* Oxblood on void is deliberately hard to miss and deliberately not red. */
+  filter: brightness(1.9);
+}
+
+.submit {
+  position: relative;
+  justify-self: start;
+  padding: 1rem 2rem;
+  font-size: 1.0625rem;
+  letter-spacing: 0.06em;
+  color: var(--color-tallow);
+  background: transparent;
+  border: 1px solid var(--color-rust);
+  cursor: pointer;
+  isolation: isolate;
+}
+
+.submit::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: -1;
+  background: radial-gradient(
+    ellipse at 50% 120%,
+    color-mix(in srgb, var(--color-ember) 55%, transparent) 0%,
+    color-mix(in srgb, var(--color-rust) 40%, transparent) 45%,
+    transparent 75%
+  );
+  opacity: 0;
+  transition: opacity var(--dur-cta) var(--ease-barn);
+}
+
+.submit:hover::before,
+.submit:focus-visible::before {
+  opacity: 1;
+}
+
+.submit:disabled {
+  opacity: 0.45;
+  cursor: wait;
+}
+
+/* --------------------------------------------------------- the reveal --- */
+
+/*
+ * §07 — "On submit: the screen goes to void for 900ms. Then, in Signage,
+ * enormous: SEAT 23."
+ *
+ * §7.5 — "A form submission that ends in a full-screen number is a moment of
+ * identity, not a confirmation. It's also instantly screenshottable." Which is
+ * why it takes the whole viewport and holds.
+ */
+.reveal {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 2.5rem;
+  background-color: var(--color-void);
+  padding: 2rem;
+  text-align: center;
+}
+
+.revealNumber {
+  font-size: clamp(4.5rem, 22vw, 16rem);
+  line-height: 0.85;
+  color: var(--color-tallow);
+  margin: 0;
+}
+
+.revealLine {
+  color: var(--color-bone);
+  margin: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .revealNumber,
+  .revealLine {
+    animation: reveal-arrive var(--dur-base) var(--ease-barn) both;
+  }
+
+  .revealLine {
+    animation-delay: 320ms;
+  }
+}
+
+@keyframes reveal-arrive {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.dismiss {
+  position: absolute;
+  bottom: 3rem;
+  color: var(--color-bone);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 0.4em;
+}

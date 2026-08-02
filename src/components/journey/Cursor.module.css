@@ -1,0 +1,76 @@
+/*
+ * §3.3 CURSOR STATES — "default (headlight), on-link (headlight contracts,
+ * tightens), on-restricted (headlight goes bad-signal green and the label
+ * reads NOT FOR YOU)."
+ *
+ * The native cursor is deliberately left visible. A site that hides the OS
+ * pointer in favour of its own has to be perfect at tracking it, and gets
+ * blamed for every dropped frame — and people who rely on cursor size or
+ * contrast settings lose them. This rides alongside instead.
+ */
+
+.cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 80;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  translate: -50% -50%;
+  opacity: 0;
+  transition: opacity var(--dur-cta) var(--ease-barn);
+}
+
+.visible {
+  opacity: 1;
+}
+
+.ring {
+  width: 34px;
+  height: 34px;
+  border: 1px solid color-mix(in srgb, var(--color-ember) 55%, transparent);
+  border-radius: 50%;
+  flex: none;
+  transition:
+    width var(--dur-cta) var(--ease-barn),
+    height var(--dur-cta) var(--ease-barn),
+    border-color var(--dur-cta) var(--ease-barn);
+}
+
+/* On a link the beam tightens. */
+.link .ring {
+  width: 16px;
+  height: 16px;
+  border-color: var(--color-ember);
+}
+
+/*
+ * §2.1 — the third and final sanctioned appearance of bad-signal on the whole
+ * site: "the cursor state when you hover something you shouldn't". The other
+ * two are the bus dome light and the seats-remaining counter.
+ */
+.restricted .ring {
+  width: 20px;
+  height: 20px;
+  border-color: var(--color-bad-signal);
+}
+
+.label {
+  color: var(--color-bad-signal);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity var(--dur-cta) var(--ease-barn);
+}
+
+.restricted .label {
+  opacity: 1;
+}
+
+/* Coarse pointers have no cursor to state. */
+@media (pointer: coarse), (prefers-reduced-motion: reduce) {
+  .cursor {
+    display: none;
+  }
+}

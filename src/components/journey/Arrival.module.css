@@ -1,0 +1,136 @@
+/*
+ * §04 ARRIVAL — the reveal.
+ * "This is the site's one moment of stillness — 40vh of pure void above the
+ * image and below it, so the barn arrives in silence."
+ *
+ * The void is the design. Nothing may be put in it.
+ */
+
+.arrival {
+  position: relative;
+  background-color: var(--color-void);
+  /* 40vh of nothing, the barn, 40vh of nothing. */
+  padding-block: 40vh;
+}
+
+/*
+ * Capped to the viewport so the barn can be taken in whole. At its natural
+ * 16:9 the plate is fractionally taller than a laptop viewport, which means
+ * the roof is always cut off — a reveal you can never quite see is not a
+ * reveal. The crop this introduces is biased downward, since the top of the
+ * frame is the empty sky §2.5 asked for and the bottom carries the fog.
+ */
+.plate {
+  position: relative;
+  width: 100%;
+  /*
+   * On a phone `50vw` is ~215px, which reduced the reveal to a letterbox
+   * strip. The cap only exists to stop the plate towering on a wide desktop,
+   * so it is applied there and the phone gets viewport height instead.
+   */
+  height: 62dvh;
+  overflow: clip;
+  isolation: isolate;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 68%;
+  display: block;
+}
+
+/* The clip sits over the poster and is revealed once it genuinely has frames,
+   so a slow connection shows the barn rather than a black rectangle. */
+.video {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 240ms linear;
+}
+
+.videoReady {
+  opacity: 1;
+}
+
+/*
+ * §2.3 — the Broken Hex, "painted large and faded on the black boards".
+ *
+ * Overlaid as live vector rather than baked into the plate: it stays crisp at
+ * every size, it can be positioned against the boards without a re-render, and
+ * critically it is the *drawn* mark rather than whatever a generative pass
+ * invents. Soft-light plus low opacity is what makes it sit in the wood
+ * instead of on top of it — §2.4 prohibits drop shadows, and a painted mark
+ * that floats is the same mistake.
+ */
+.hex {
+  position: absolute;
+  top: 52%;
+  left: 56%;
+  transform: translate(-50%, -50%);
+  width: clamp(7rem, 17vw, 15rem);
+  height: auto;
+  color: var(--color-tallow);
+  /*
+   * Screen, not soft-light. Soft-light preserves the underlying luminance,
+   * so on boards this dark it resolves to nothing at any opacity worth using.
+   * Screen lifts, which is what whitewash on black wood actually does.
+   */
+  opacity: 0.2;
+  mix-blend-mode: screen;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  /* The plate has to dissolve into the void rather than end at a hard edge —
+     it is bordered by 40vh of nothing on both sides, and a visible seam would
+     turn the silence into a picture frame. */
+  background:
+    linear-gradient(to bottom, var(--color-void) 0%, transparent 26%),
+    linear-gradient(to top, var(--color-void) 0%, transparent 42%);
+}
+
+/*
+ * §04 — "No copy for the first 60% of the section. Then, small, centered."
+ * The line sits in the lower void, alone, at Record size.
+ */
+.line {
+  display: block;
+  margin: 6rem auto 0;
+  text-align: center;
+  opacity: 0;
+}
+
+@media (min-width: 48rem) {
+  .plate {
+    height: min(72dvh, 50vw);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .line {
+    transition: opacity calc(var(--dur-base) * 1.4) var(--ease-barn);
+  }
+}
+
+.lineShown {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .line {
+    opacity: 1;
+  }
+
+  /* Without the scroll there is no 60% to wait for, and 80vh of empty screen
+     buys nothing when nothing is going to arrive into it. */
+  .arrival {
+    padding-block: 18vh;
+  }
+}

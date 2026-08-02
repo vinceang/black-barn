@@ -1,0 +1,131 @@
+/* ==========================================================================
+   THE SIGNAL — static for the text-only views (§02).
+
+   §2.1 casts bad-signal as "the intrusion of something modern and wrong into
+   a hand-built world". This is that idea expressed as a texture rather than a
+   colour: an untuned television behind the sections that have no image of
+   their own, so the void is never simply empty.
+
+   Strictly monochrome — bone on void. The green stays restricted to its three
+   sanctioned places (§2.1) and does not leak in here.
+
+   It is also a different texture from §2.4's grain, deliberately: coarser and
+   four times faster. Film grain and signal noise should not read as the same
+   thing, or the barn and the broadcast start to feel like one surface.
+   ========================================================================== */
+
+@layer components {
+  .signal {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+    /* Idles faintly; scroll velocity drives the rest. See Signal.tsx. */
+    opacity: calc(0.05 + var(--signal-intensity, 0) * 0.2);
+    transition: opacity 200ms linear;
+    mix-blend-mode: screen;
+  }
+
+  .signal__noise {
+    position: absolute;
+    inset: -50%;
+    background-image: var(--grain-plate);
+    background-repeat: repeat;
+    animation: grain-shift calc(6 / 24 * 1s) steps(1, end) infinite;
+    will-change: transform;
+  }
+
+  /* Scanlines. Sub-pixel on dense displays, which is right — they should be
+     felt rather than seen. */
+  .signal__lines {
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--color-bone) 10%, transparent) 0 1px,
+      transparent 1px 3px
+    );
+  }
+
+  /* The roll bar: a band drifting down the frame the way an untuned set slips
+     out of sync. */
+  .signal__roll {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 26%;
+    background: linear-gradient(
+      to bottom,
+      transparent 0%,
+      color-mix(in srgb, var(--color-bone) 5%, transparent) 44%,
+      color-mix(in srgb, var(--color-tallow) 10%, transparent) 50%,
+      color-mix(in srgb, var(--color-bone) 5%, transparent) 56%,
+      transparent 100%
+    );
+    animation: signal-roll 9s linear infinite;
+    will-change: transform;
+  }
+
+  @keyframes signal-roll {
+    from {
+      transform: translateY(-120%);
+    }
+    to {
+      transform: translateY(460%);
+    }
+  }
+
+  /*
+   * The dropout. Every eleven seconds the picture tears for three frames.
+   * Deterministic, not random — §3.2.5 makes the same argument about the
+   * Blink: a fault two people can compare notes about is worth more than one
+   * that fires unpredictably.
+   *
+   * Applied to the type, not the noise. It is the transmission that fails,
+   * and the words are what is being transmitted.
+   */
+  .signal-tear {
+    animation: signal-tear 11s steps(1, end) infinite;
+  }
+
+  @keyframes signal-tear {
+    0%,
+    93% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    94% {
+      transform: translateX(-7px);
+      opacity: 0.78;
+    }
+    95% {
+      transform: translateX(10px);
+      opacity: 1;
+    }
+    96% {
+      transform: translateX(-3px);
+      opacity: 0.88;
+    }
+    97%,
+    100% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+}
+
+/*
+ * §3.4 — under reduced motion the signal holds still. The texture stays,
+ * because it is identity; the roll, the noise and the tear do not.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .signal__noise,
+  .signal-tear {
+    animation: none;
+  }
+
+  .signal__roll {
+    display: none;
+  }
+}

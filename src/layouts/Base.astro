@@ -1,0 +1,48 @@
+---
+/**
+ * §2.2 — the three voices, self-hosted so the Threshold never waits on a
+ * third-party connection before it can cut to the hero (§3.2.1).
+ *
+ * Archivo's wdth build is imported specifically: the default export carries
+ * weight only, and the Signage role needs the width axis at 62%.
+ */
+import "@fontsource/instrument-serif/400.css";
+import "@fontsource-variable/newsreader";
+import "@fontsource-variable/archivo/wdth.css";
+import "@fontsource/courier-prime/400.css";
+import "@fontsource/courier-prime/700.css";
+
+import "../styles/globals.css";
+import { color } from "../lib/tokens.generated";
+
+interface Props {
+  title: string;
+  description: string;
+  /** §8 — some routes are meant to be found, not indexed. */
+  noindex?: boolean;
+}
+
+const { title, description, noindex = false } = Astro.props;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content={color.void} />
+    <meta name="color-scheme" content="dark" />
+
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content="You will be picked up." />
+    <meta property="og:type" content="website" />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+
+    <link rel="icon" href="/hex.svg" type="image/svg+xml" />
+    <link rel="preload" as="image" href="/media/a1-bus-hero-poster.avif" type="image/avif" />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

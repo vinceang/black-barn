@@ -1,0 +1,18 @@
+---
+/**
+ * §5.5 — the 404. Copy is final:
+ *   "you have gone off the road. / there is nothing out here. / [ RETURN TO THE LOT ]"
+ */
+import Base from "../layouts/Base.astro";
+import { Grain } from "../components/texture/Grain";
+---
+
+<Base title="Off the road — The Black Barn" description="There is nothing out here." noindex>
+  <main class="plain">
+    <h1 class="t-invitation plain__title">You have gone off the road.</h1>
+    <p class="t-record plain__body">there is nothing out here.</p>
+    <a class="t-signage plain__back" href="/">Return to the lot</a>
+  </main>
+
+  <Grain variant="global" />
+</Base>

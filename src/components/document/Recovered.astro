@@ -1,0 +1,37 @@
+---
+/**
+ * §08 RECOVERED — "Gallery, framed as a folder of material someone else
+ * collected. Each captioned in Record with a date and nothing else."
+ *
+ * Static. No JS at all — it is a list of images and timestamps, and making it
+ * an island would buy nothing.
+ */
+import { RECOVERED } from "../../lib/media";
+---
+
+<section id="recovered" class="recovered">
+  <div class="recovered__inner">
+    <p class="t-record recovered__eyebrow">RECOVERED</p>
+
+    <div class="recovered__grid">
+      {
+        RECOVERED.map((item) => (
+          <figure class="recovered__item">
+            <div class="recovered__frame">
+              <picture>
+                <source srcset={item.avif} type="image/avif" />
+                <img class="recovered__img" src={item.jpg} alt={item.alt} loading="lazy" />
+              </picture>
+              <div class="grain grain--media" aria-hidden="true"></div>
+            </div>
+            {/* §08 — "a date and nothing else". */}
+            <figcaption class="t-record recovered__caption">{item.stamp}</figcaption>
+          </figure>
+        ))
+      }
+    </div>
+
+    {/* §08 — "During the season, one new item appears per week." */}
+    <p class="t-record recovered__note">one item is added each week of the season.</p>
+  </div>
+</section>

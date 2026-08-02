@@ -1,0 +1,252 @@
+/*
+ * §01 THE BUS — the thesis.
+ * "Full-viewport, 100dvh. Locked-off wide of the school bus at night... Type
+ * sits in the dark lower-left third."
+ */
+
+.hero {
+  position: relative;
+  min-height: 100dvh;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  overflow: clip;
+  isolation: isolate;
+}
+
+/* ---------------------------------------------------------------- media -- */
+
+.media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.plate {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /*
+   * A portrait viewport only shows about a quarter of this frame's width, so
+   * the crop has to be chosen, not defaulted. Centring lands on the flank —
+   * rusted panels and nothing else, which reads as an abstract wall. 31% holds
+   * the headlights, the nose and the door in frame, so the shot still says
+   * "a bus, at night, on a road" inside the four seconds §1 allows for it.
+   *
+   * This is the stopgap. The real answer is a dedicated portrait plate and
+   * clip; a 16:9 master cannot serve both compositions honestly.
+   */
+  object-position: 31% 50%;
+}
+
+@media (min-width: 48rem) {
+  .plate {
+    object-position: 50% 50%;
+  }
+}
+
+.video {
+  position: absolute;
+  inset: 0;
+  /* Sits over the poster and is revealed once it actually has frames. */
+  opacity: 0;
+  transition: opacity 200ms linear;
+}
+
+.videoReady {
+  opacity: 1;
+}
+
+/*
+ * §3.1 BREATHING — "a permanent 1.00 → 1.015 scale oscillation on a 9-second
+ * sine. Imperceptible individually; alive cumulatively."
+ * Half the period per direction, alternating, gives a 9s round trip.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .media {
+    animation: breathe calc(var(--breathe-period) / 2) ease-in-out infinite alternate;
+    will-change: transform;
+  }
+}
+
+@keyframes breathe {
+  from {
+    transform: scale(var(--breathe-from));
+  }
+  to {
+    transform: scale(var(--breathe-to));
+  }
+}
+
+/*
+ * Legibility floor for the type well. Not decoration — §2.1 prohibits
+ * gradients that read as gradients, so this is pure void falling off to
+ * nothing, doing the same job a printed duotone would.
+ */
+.scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    linear-gradient(to top, var(--color-void) 0%, transparent 58%),
+    /*
+     * §2.5 — "type living in that dark". The plate's own black runs out around
+     * 40% of the frame, and the hero line reaches slightly past that onto the
+     * bus nose, so the falloff carries the darkness the rest of the way.
+     */
+      linear-gradient(
+        to right,
+        var(--color-void) 0%,
+        color-mix(in srgb, var(--color-void) 82%, transparent) 30%,
+        transparent 54%
+      );
+}
+
+/* ----------------------------------------------------------------- type -- */
+
+.type {
+  position: relative;
+  z-index: 3;
+  grid-row: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  /* Bottom padding clears the fixed cookie bar on phones. */
+  padding: 2rem 1.5rem 6rem;
+  /*
+   * The well has to be at least as wide as the hero line wants to be. The type
+   * scale is fixed by the tokens (§2.2), so the container yields to it — a
+   * narrower cap here silently re-wraps the H1 into four lines and blows the
+   * section past 100dvh.
+   */
+  max-width: min(100%, 68rem);
+}
+
+@media (min-width: 48rem) {
+  .type {
+    padding: 4rem 4rem 5rem;
+    gap: 2rem;
+  }
+}
+
+.eyebrow {
+  color: var(--color-bone);
+}
+
+.h1 {
+  font-size: var(--text-hero);
+  margin: 0;
+  /*
+   * §2.5 — the type lives in the dark, not on the subject. 11ch breaks the
+   * line as "You will be / picked up.", which keeps the block inside the
+   * lower-left third instead of climbing across the bus.
+   */
+  max-width: 11ch;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.5rem 2rem;
+}
+
+/* --------------------------------------------------------------- button -- */
+
+/*
+ * §3.3 — "Buttons don't hover-lift. They get warmer — a 400ms ember bloom
+ * behind the label, like something heating up."
+ */
+.cta {
+  position: relative;
+  display: inline-block;
+  padding: 0.9rem 1.75rem;
+  font-size: 1.0625rem;
+  letter-spacing: 0.06em;
+  color: var(--color-tallow);
+  text-decoration: none;
+  border: 1px solid var(--color-rust);
+  background-color: transparent;
+  isolation: isolate;
+}
+
+.cta::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: -1;
+  background: radial-gradient(
+    ellipse at 50% 120%,
+    color-mix(in srgb, var(--color-ember) 55%, transparent) 0%,
+    color-mix(in srgb, var(--color-rust) 40%, transparent) 45%,
+    transparent 75%
+  );
+  opacity: 0;
+  transition: opacity var(--dur-cta) var(--ease-barn);
+}
+
+.cta:hover::before,
+.cta:focus-visible::before {
+  opacity: 1;
+}
+
+.cta:hover,
+.cta:focus-visible {
+  border-color: var(--color-ember);
+  transition: border-color var(--dur-cta) var(--ease-barn);
+}
+
+/* ----------------------------------------------------------------- link -- */
+
+/*
+ * §3.3 — "Links underline by drawing left-to-right, then the line drips 2px
+ * before settling."
+ */
+.link {
+  position: relative;
+  color: var(--color-bone);
+  text-decoration: none;
+  padding-bottom: 0.35em;
+}
+
+.link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background-color: var(--color-bone);
+  transform-origin: left center;
+  transform: scaleX(0);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .link:hover::after,
+  .link:focus-visible::after {
+    animation: draw-and-drip var(--dur-base) var(--ease-barn) forwards;
+  }
+}
+
+/* Reduced motion still gets the underline — it just arrives already drawn. */
+@media (prefers-reduced-motion: reduce) {
+  .link:hover::after,
+  .link:focus-visible::after {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes draw-and-drip {
+  0% {
+    transform: scaleX(0) translateY(0);
+  }
+  65% {
+    transform: scaleX(1) translateY(0);
+  }
+  82% {
+    transform: scaleX(1) translateY(2px);
+  }
+  100% {
+    transform: scaleX(1) translateY(0);
+  }
+}

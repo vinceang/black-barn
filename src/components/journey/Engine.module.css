@@ -1,0 +1,83 @@
+/*
+ * §3.2.7 — "a persistent, beautiful toggle in the corner".
+ * §5.2 / §5.5 — copy: TURN ON THE ENGINE / THE ENGINE IS RUNNING.
+ */
+
+/*
+ * Top-right on phones. The bottom edge belongs to §01's CTA and the cookie
+ * bar; a third fixed element down there guarantees a collision on a 430px
+ * screen. It returns to the corner on anything wider.
+ */
+.engine {
+  position: fixed;
+  right: 1rem;
+  top: 1rem;
+  bottom: auto;
+  z-index: 70;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.7rem 1rem;
+  background-color: color-mix(in srgb, var(--color-void) 78%, transparent);
+  border: 1px solid var(--color-soot);
+  color: var(--color-bone);
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  transition: border-color var(--dur-cta) var(--ease-barn);
+}
+
+@media (min-width: 48rem) {
+  .engine {
+    right: 2rem;
+    top: auto;
+    bottom: 2rem;
+  }
+}
+
+.engine:hover,
+.engine:focus-visible {
+  border-color: var(--color-rust);
+}
+
+/*
+ * The indicator is a bare dot: unlit when off, an ember bloom when running.
+ * §2.4 prohibits drop shadows — this is a light source, so it blooms.
+ */
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--color-soot);
+  flex: none;
+  transition:
+    background-color var(--dur-base) var(--ease-barn),
+    box-shadow var(--dur-base) var(--ease-barn);
+}
+
+.running .dot {
+  background-color: var(--color-ember);
+  box-shadow:
+    0 0 6px color-mix(in srgb, var(--color-ember) 80%, transparent),
+    0 0 16px color-mix(in srgb, var(--color-ember) 45%, transparent);
+}
+
+.running {
+  color: var(--color-tallow);
+  border-color: var(--color-rust);
+}
+
+/* The engine idles. So does its label. */
+@media (prefers-reduced-motion: no-preference) {
+  .running .dot {
+    animation: engine-idle 2.6s ease-in-out infinite alternate;
+  }
+}
+
+@keyframes engine-idle {
+  from {
+    opacity: 0.72;
+  }
+  to {
+    opacity: 1;
+  }
+}

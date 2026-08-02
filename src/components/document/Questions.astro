@@ -1,0 +1,31 @@
+---
+/**
+ * §09 THE QUESTIONS — "Presented as a xeroxed internal document."
+ *
+ * Native <details>/<summary>. §3.4 requires the FAQ to be "semantic HTML and
+ * screen-reader complete", and <details> is that before any script runs — it
+ * is keyboard-operable, exposes expanded state to assistive tech, and is
+ * findable by in-page search even while collapsed.
+ *
+ * §7.6 expects this to be the most-shared thing on the site.
+ */
+import { FAQ, FAQ_HEADER } from "../../lib/faq";
+---
+
+<section id="questions" class="questions">
+  <div class="questions__sheet">
+    <p class="t-record questions__header">{FAQ_HEADER}</p>
+
+    {
+      FAQ.map((item) => (
+        <details class="questions__item">
+          <summary class="t-record questions__q">
+            <span class="questions__n">{item.n}</span>
+            <span>{item.q}</span>
+          </summary>
+          <p class="t-record questions__a">{item.a}</p>
+        </details>
+      ))
+    }
+  </div>
+</section>

@@ -1,0 +1,48 @@
+---
+import Base from "../layouts/Base.astro";
+import { Journey } from "../components/journey/Journey";
+import { Booking } from "../components/booking/Booking";
+import Recovered from "../components/document/Recovered.astro";
+import Questions from "../components/document/Questions.astro";
+import Notice from "../components/document/Notice.astro";
+import { Grain } from "../components/texture/Grain";
+import { CookieNotice } from "../components/CookieNotice";
+import { SEASON, TOTAL_NIGHTS, formatNight, nextDeparture } from "../lib/season";
+import { getDeparture, getManifest } from "../lib/seats/api";
+
+const next = nextDeparture();
+
+// §06–§07 resolved at build time. The manifest is real content in the HTML
+// rather than something that appears after hydration — see Booking.tsx.
+const initialDeparture = await getDeparture(next.date);
+const initialSeats = await getManifest(next.date);
+
+// §00 — "Departure number and remaining seats, pulled live."
+const thresholdLine = `DEPARTURE ${next.index} OF ${TOTAL_NIGHTS} · ${SEASON.seatsPerDeparture} SEATS`;
+
+// §01 eyebrow. Real information, stated flatly (§5.1).
+const eyebrow = `${formatNight(SEASON.start)} — ${formatNight(SEASON.end)} · UNDISCLOSED COUNTY ROAD · ${SEASON.seatsPerDeparture} SEATS PER DEPARTURE`;
+---
+
+<Base
+  title="The Black Barn"
+  description="You will be picked up. October 2 — November 8. Forty seats per departure, six departures a night. 18+."
+>
+  {/* §00–§05. One island: the scroll is a single timeline. */}
+  <Journey client:load thresholdLine={thresholdLine} eyebrow={eyebrow} />
+
+  {/* §06–§07. A second island, hydrated only once it is reached — the
+      journey must not pay for seat inventory it never reads. */}
+  <Booking client:visible initialDeparture={initialDeparture} initialSeats={initialSeats} />
+
+  {/* §08–§10 are documents. No JS. */}
+  <Recovered />
+  <Questions />
+  <Notice />
+
+  {/* §5.5 — "we keep a record of who comes here." */}
+  <CookieNotice client:idle />
+
+  {/* §2.4 — the plate sits above the page and below nothing. */}
+  <Grain variant="global" />
+</Base>

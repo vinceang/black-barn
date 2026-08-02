@@ -1,0 +1,72 @@
+---
+/**
+ * §10 THE NOTICE — "Footer as a posted warning."
+ *
+ * §5.1: "Real information is delivered flatly and completely. Ambiguity is for
+ * the horror; it is never for the logistics. People need to know where to
+ * park." Every fact below is drawn from written material (§0, §5.4) rather
+ * than invented to fill the block.
+ *
+ * The final line is set roman, not italic. §2.2 allows exactly one italic on
+ * the site and it belongs to "it does not." in §5.3 — the brief's own
+ * markdown emphasis on this line is formatting, not a type instruction.
+ */
+import { BrokenHex } from "../BrokenHex";
+import { Newsletter } from "../Newsletter";
+import { FAQ } from "../../lib/faq";
+import { SEASON, formatNight } from "../../lib/season";
+
+const hazards = FAQ.find((f) => f.n === "08")!;
+const phones = FAQ.find((f) => f.n === "11")!;
+---
+
+<footer id="notice" class="notice">
+  {/* No client directive — the mark is markup, not behaviour. */}
+  <BrokenHex size="auto" className="notice__hex" />
+
+  <div class="notice__inner">
+    <dl class="notice__grid">
+      <div class="notice__block">
+        <dt class="t-record">SEASON</dt>
+        {/* One expression per sentence. Splitting across source lines lets the
+            template collapse the break and render "2026.6 departures". */}
+        <dd class="t-record">
+          {`${formatNight(SEASON.start)} — ${formatNight(SEASON.end)}, ${SEASON.year}. ${SEASON.departuresPerNight} departures a night. ${SEASON.seatsPerDeparture} seats per departure.`}
+        </dd>
+      </div>
+
+      <div class="notice__block">
+        <dt class="t-record">THE LOT</dt>
+        <dd class="t-record">
+          The location is not published. Coordinates for the gravel lot are sent to ticket
+          holders 48 hours before their departure. Do not drive to the barn. There is no
+          parking at the barn.
+        </dd>
+      </div>
+
+      <div class="notice__block">
+        <dt class="t-record">AGE</dt>
+        <dd class="t-record">{SEASON.minimumAge} and over.</dd>
+      </div>
+
+      <div class="notice__block">
+        <dt class="t-record">BEFORE YOU BOOK</dt>
+        <dd class="t-record">{hazards.a}</dd>
+      </div>
+
+      <div class="notice__block">
+        <dt class="t-record">PHONES</dt>
+        <dd class="t-record">{phones.a}</dd>
+      </div>
+    </dl>
+
+    {/* §8 — "Build the list in the dark." The capture never goes away. */}
+    <Newsletter client:visible />
+
+    <p class="t-invitation notice__final">The barn was here before the road was.</p>
+
+    <p class="t-record notice__meta">
+      The Black Barn is a licensed entertainment venue operated with safety staff on site.
+    </p>
+  </div>
+</footer>

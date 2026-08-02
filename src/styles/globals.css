@@ -1,0 +1,147 @@
+@import "tailwindcss";
+@import "./tokens.css";
+@import "./texture.css";
+@import "./signal.css";
+@import "./document.css";
+@import "./pages.css";
+
+/* ==========================================================================
+   BASE
+   §2.1 — the site is 78% darkness. Color is an event, not a surface.
+   ========================================================================== */
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html {
+    background-color: var(--color-void);
+    /* Lenis drives scrolling; the native smooth-scroll would fight it. */
+    scroll-behavior: auto;
+  }
+
+  body {
+    background-color: var(--color-void);
+    color: var(--color-tallow);
+    font-family: var(--font-invitation-prose);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    overscroll-behavior-y: none;
+  }
+
+  ::selection {
+    background-color: var(--color-oxblood);
+    color: var(--color-tallow);
+  }
+
+  /* §3.4 — full keyboard navigation with a visible ember focus ring. */
+  :focus-visible {
+    outline: 1px solid var(--color-ember);
+    outline-offset: 4px;
+  }
+
+  /* The ring is the only place ember is allowed to appear without being light. */
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  /* Lenis (§3.1). Minimal required rules, inlined rather than imported so the
+     smooth-scroll layer costs nothing extra at the network level. */
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+}
+
+/* ==========================================================================
+   THE THREE VOICES · §2.2
+   Casing is enforced here, not left to the author. "All Signage text is
+   uppercase. All Invitation text is sentence case." The contrast between a
+   shouting sign and a whispering invitation is the brand.
+   ========================================================================== */
+
+@layer components {
+  .t-invitation {
+    font-family: var(--font-invitation);
+    font-weight: 400;
+    letter-spacing: var(--tracking-invitation);
+    line-height: var(--leading-invitation);
+    color: var(--color-tallow);
+    /* §2.2 — no italics anywhere except one line in §5.3, which opts in
+       explicitly via .t-exception. */
+    font-style: normal;
+    text-transform: none;
+    text-wrap: balance;
+  }
+
+  /* Long-form Invitation: same voice, a face built for reading at length. */
+  .t-invitation-prose {
+    font-family: var(--font-invitation-prose);
+    letter-spacing: normal;
+    line-height: 1.5;
+    color: var(--color-tallow);
+    font-style: normal;
+    text-transform: none;
+    text-wrap: pretty;
+  }
+
+  .t-signage {
+    font-family: var(--font-signage);
+    /* Archivo's wdth axis is exposed as standard font-stretch by the wdth
+       build, so the condensed-black target is set the plain CSS way. */
+    font-stretch: var(--stretch-signage);
+    font-weight: var(--weight-signage);
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+    line-height: 0.95;
+    color: var(--color-tallow);
+  }
+
+  /*
+   * §2.2 — "The Record is always <=14px, always letterspaced +0.06em, always
+   * bone not tallow." The clamp makes the ceiling structural: a component may
+   * set --record-size to tune within the range, but it cannot exceed 14px.
+   */
+  .t-record {
+    font-family: var(--font-record);
+    font-size: clamp(0.625rem, var(--record-size, var(--text-label)), var(--size-record-max));
+    letter-spacing: var(--tracking-record);
+    line-height: 1.6;
+    color: var(--color-bone);
+    text-transform: none;
+    font-style: normal;
+  }
+
+  /* The single sanctioned italic on the site: "it does not." (§5.3) */
+  .t-exception {
+    font-style: italic;
+  }
+}
+
+/* ==========================================================================
+   REDUCED MOTION · §3.4
+   Not a fallback. A second design. The animated layers opt themselves out;
+   this block only guarantees nothing moves on its own.
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

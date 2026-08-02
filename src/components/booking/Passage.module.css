@@ -1,0 +1,220 @@
+/*
+ * §06 PASSAGE — "Booking, but framed as boarding. Three tiers as stencilled
+ * boarding passes, Signage type, oxblood rules."
+ */
+
+.passage {
+  position: relative;
+  background-color: var(--color-void);
+  padding: 8rem 1.5rem;
+}
+
+@media (min-width: 48rem) {
+  .passage {
+    padding: 10rem 4rem;
+  }
+}
+
+.inner {
+  max-width: 78rem;
+  margin: 0 auto;
+}
+
+.eyebrow {
+  color: var(--color-bone);
+  margin: 0 0 3rem;
+}
+
+/* ---------------------------------------------------------------- tiers -- */
+
+.tiers {
+  display: grid;
+  gap: 1px;
+  /* The 1px gap plus a soot ground draws the rules between passes without
+     borders that would double up at the seams. */
+  background-color: var(--color-soot);
+  border-block: 1px solid var(--color-soot);
+}
+
+@media (min-width: 60rem) {
+  .tiers {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.tier {
+  background-color: var(--color-void);
+  padding: 2.5rem 2rem 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  /* A boarding pass is a torn strip. The oxblood rule is the perforation. */
+  border-top: 2px solid var(--color-oxblood);
+}
+
+.tierName {
+  font-size: clamp(1.5rem, 2.6vw, 2.25rem);
+  margin: 0;
+}
+
+.price {
+  font-size: clamp(2.25rem, 4vw, 3.5rem);
+  color: var(--color-tallow);
+  line-height: 1;
+}
+
+.priceUnknown {
+  color: var(--color-rust);
+}
+
+.tierLine {
+  margin: 0;
+  flex: 1;
+}
+
+.claim {
+  align-self: flex-start;
+  position: relative;
+  display: inline-block;
+  margin-top: 0.5rem;
+  padding: 0.85rem 1.6rem;
+  font-size: 1rem;
+  letter-spacing: 0.06em;
+  color: var(--color-tallow);
+  text-decoration: none;
+  background: transparent;
+  border: 1px solid var(--color-rust);
+  cursor: pointer;
+  isolation: isolate;
+}
+
+/* §3.3 — buttons get warmer, they do not lift. */
+.claim::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: -1;
+  background: radial-gradient(
+    ellipse at 50% 120%,
+    color-mix(in srgb, var(--color-ember) 55%, transparent) 0%,
+    color-mix(in srgb, var(--color-rust) 40%, transparent) 45%,
+    transparent 75%
+  );
+  opacity: 0;
+  transition: opacity var(--dur-cta) var(--ease-barn);
+}
+
+.claim:hover::before,
+.claim:focus-visible::before {
+  opacity: 1;
+}
+
+.request {
+  align-self: flex-start;
+  margin-top: 0.5rem;
+  color: var(--color-bone);
+  text-decoration: underline;
+  text-underline-offset: 0.4em;
+  text-decoration-thickness: 1px;
+}
+
+/* ------------------------------------------------------------- calendar -- */
+
+.calendarHead {
+  margin: 5rem 0 1.5rem;
+  color: var(--color-bone);
+}
+
+.calendar {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr));
+  gap: 1px;
+  background-color: var(--color-soot);
+  border: 1px solid var(--color-soot);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.night {
+  background-color: var(--color-void);
+  margin: 0;
+}
+
+.nightButton {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: flex-start;
+  padding: 1.1rem 1.1rem 1.25rem;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  text-align: left;
+  color: inherit;
+  transition: background-color var(--dur-cta) var(--ease-barn);
+}
+
+.nightButton:hover:not(:disabled),
+.nightButton:focus-visible {
+  background-color: var(--color-ash);
+}
+
+.nightDate {
+  font-size: 1.125rem;
+  color: var(--color-tallow);
+}
+
+.seats {
+  color: var(--color-bone);
+}
+
+/*
+ * §2.1 — bad-signal appears in exactly three places sitewide. This is the
+ * second: the seats-remaining counter. Nowhere else in this file.
+ */
+.seatsLow {
+  color: var(--color-bad-signal);
+}
+
+/*
+ * §06 — "Sold-out nights are not removed; they're struck through in oxblood
+ * and labelled FULL. Scarcity you can see."
+ */
+.nightFull .nightDate {
+  color: var(--color-bone);
+  text-decoration: line-through;
+  text-decoration-color: var(--color-oxblood);
+  text-decoration-thickness: 2px;
+}
+
+.nightFull .seats {
+  color: var(--color-rust);
+}
+
+.nightPast {
+  opacity: 0.32;
+}
+
+.nightPast .nightDate {
+  text-decoration: line-through;
+  text-decoration-color: var(--color-soot);
+}
+
+.nightButton:disabled {
+  cursor: not-allowed;
+}
+
+/* §5.5 — "FULL. the seats do not increase." Shown against the selected night. */
+.note {
+  margin: 1.5rem 0 0;
+  color: var(--color-rust);
+  min-height: 1.6em;
+}
+
+.selected {
+  background-color: var(--color-ash);
+  outline: 1px solid var(--color-rust);
+  outline-offset: -1px;
+}
