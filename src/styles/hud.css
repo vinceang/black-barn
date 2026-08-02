@@ -1,0 +1,72 @@
+/* ==========================================================================
+   HUD CORNERS — viewfinder brackets on media containers.
+
+   Four L-shaped brackets inset at the corners of an image or clip, drawn as a
+   single pseudo-element with eight gradient slivers. No extra DOM, which is
+   what lets the same class sit on React components and static .astro markup
+   alike without a wrapper component in either.
+
+   It reads as a viewfinder — something framing and measuring the shot rather
+   than decorating it, which suits a site whose §08 is presented as recovered
+   surveillance and whose §07 is a document.
+
+   Deliberately quiet: 1px at ~10% bone. §2.1 keeps the site at 78% darkness,
+   and a bright frame would draw more attention than the photograph inside it.
+   ========================================================================== */
+
+@layer components {
+  /*
+   * Deliberately does NOT set `position`. Every container this is applied to
+   * is already positioned, and declaring it here would risk flattening an
+   * `absolute` media layer to `relative` — the cascade happens to favour the
+   * CSS Module today (unlayered beats layered), but that is a subtle rule to
+   * hang a layout on.
+   */
+  .hud::after {
+    content: "";
+    position: absolute;
+    /* Inset from the edge rather than flush to it — a bracket touching the
+       border reads as a broken frame, not a viewfinder. */
+    inset: var(--hud-inset, 0.6rem);
+    pointer-events: none;
+    z-index: 6;
+
+    --hud-arm: 8px;
+    --hud-line: 1px;
+    --hud-colour: color-mix(in srgb, var(--color-bone) 34%, transparent);
+
+    background:
+      /* top-left */
+      linear-gradient(var(--hud-colour), var(--hud-colour)) 0 0 / var(--hud-arm)
+        var(--hud-line) no-repeat,
+      linear-gradient(var(--hud-colour), var(--hud-colour)) 0 0 / var(--hud-line)
+        var(--hud-arm) no-repeat,
+      /* top-right */ linear-gradient(var(--hud-colour), var(--hud-colour)) 100% 0 /
+        var(--hud-arm) var(--hud-line) no-repeat,
+      linear-gradient(var(--hud-colour), var(--hud-colour)) 100% 0 / var(--hud-line)
+        var(--hud-arm) no-repeat,
+      /* bottom-left */ linear-gradient(var(--hud-colour), var(--hud-colour)) 0 100% /
+        var(--hud-arm) var(--hud-line) no-repeat,
+      linear-gradient(var(--hud-colour), var(--hud-colour)) 0 100% / var(--hud-line)
+        var(--hud-arm) no-repeat,
+      /* bottom-right */ linear-gradient(var(--hud-colour), var(--hud-colour)) 100% 100% /
+        var(--hud-arm) var(--hud-line) no-repeat,
+      linear-gradient(var(--hud-colour), var(--hud-colour)) 100% 100% / var(--hud-line)
+        var(--hud-arm) no-repeat;
+  }
+
+  /* Full-bleed sections carry longer arms and sit further in, because the
+     frame is measured against the screen rather than against a card. */
+  .hud--bleed::after {
+    inset: var(--hud-inset, 1.25rem);
+    --hud-arm: 16px;
+  }
+
+  /* Small plates — §08's evidence — take shorter arms so the bracket never
+     competes with the photograph it is holding. */
+  .hud--tight::after {
+    inset: var(--hud-inset, 0.35rem);
+    --hud-arm: 6px;
+    --hud-colour: color-mix(in srgb, var(--color-bone) 26%, transparent);
+  }
+}

@@ -161,7 +161,7 @@ export function TheRoad() {
 
   return (
     <section id="the-road" ref={sectionRef} className={styles.road} aria-label="The road">
-      <div className={styles.frame}>
+      <div className={cn(styles.frame, "hud", "hud--bleed")}>
         <div ref={mediaRef} className={styles.media}>
           {/* The poster is the floor: what reduced motion shows, what a refused
               autoplay falls back to, and what fills the frame until the clip

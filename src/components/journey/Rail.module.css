@@ -1,15 +1,22 @@
 /*
  * THE RAIL — a fixed index of the journey down the right edge.
  *
- * The site is a single scroll with eleven parts and no navigation of any kind,
- * which left no way to know how far in you were, how much was left, or that
- * §08–§10 existed at all. The rail is the wayfinding, and it is drawn in the
- * Signage voice (§2.2: "wayfinding, tier names, dates, prices") because that
- * is precisely what that role is for.
+ * VERTICAL. The first build laid each label out horizontally and revealed it
+ * on hover, which meant the rail reserved a corridor of horizontal space it
+ * only used occasionally, and the labels pointed into the page. Set in
+ * `writing-mode: vertical-rl` the whole thing costs about one line-height of
+ * width and runs with the edge instead of against it.
  *
- * Pointer devices only. A phone has no room for a persistent rail and no hover
- * to reveal its labels; §03's progress rule and §05's rungs already carry
- * position there.
+ * `text-orientation` is left alone deliberately: `upright` is correct for CJK
+ * (which is where that pattern comes from) but stacks Latin letters into a
+ * totem. Rotated is what Latin wants.
+ *
+ * Drawn in the Signage voice — §2.2 assigns that role to "wayfinding", which
+ * is exactly what this is.
+ *
+ * Pointer devices at desktop width only. A phone has no room for a persistent
+ * rail and no hover to resolve it; §03's progress rule and §05's rungs carry
+ * position there instead.
  */
 
 .rail {
@@ -19,97 +26,87 @@
 @media (min-width: 64rem) and (pointer: fine) {
   .rail {
     position: fixed;
-    right: 1.75rem;
+    right: 1.5rem;
     top: 50%;
     translate: 0 -50%;
     z-index: 65;
     display: flex;
-    flex-direction: column;
-    gap: 0.15rem;
-    align-items: flex-end;
-    padding: 0;
+    align-items: center;
+    gap: 0.9rem;
     margin: 0;
+    padding: 0;
     list-style: none;
   }
+}
+
+/* The stack of ticks, hard against the edge. */
+.stops {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 .item {
   display: block;
 }
 
-/*
- * Each stop is a tick and a number. The label only exists on hover or focus,
- * so at rest the rail is a column of hairlines — present, not shouting.
- */
 .link {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 0.7rem;
-  padding: 0.32rem 0;
-  text-decoration: none;
-  color: var(--color-bone);
-  opacity: 0.35;
-  transition:
-    opacity var(--dur-cta) var(--ease-barn),
-    color var(--dur-cta) var(--ease-barn);
-}
-
-.link:hover,
-.link:focus-visible {
-  opacity: 1;
-  color: var(--color-tallow);
-}
-
-.name {
-  font-size: 0.6875rem;
-  letter-spacing: 0.14em;
-  white-space: nowrap;
-  opacity: 0;
-  translate: 0.4rem 0;
-  transition:
-    opacity var(--dur-cta) var(--ease-barn),
-    translate var(--dur-cta) var(--ease-barn);
-}
-
-.link:hover .name,
-.link:focus-visible .name,
-.current .name {
-  opacity: 1;
-  translate: 0 0;
+  display: block;
+  padding: 0.2rem 0;
+  cursor: pointer;
 }
 
 .tick {
-  width: 1.35rem;
+  display: block;
+  width: 0.85rem;
   height: 1px;
-  flex: none;
-  background-color: currentColor;
+  background-color: color-mix(in srgb, var(--color-bone) 28%, transparent);
   transition:
     width var(--dur-base) var(--ease-barn),
     background-color var(--dur-base) var(--ease-barn);
 }
 
-/* Where you are. The only ember on the rail, and the only long tick. */
-.current {
-  opacity: 1;
-  color: var(--color-tallow);
+.link:hover .tick,
+.link:focus-visible .tick {
+  width: 1.6rem;
+  background-color: var(--color-bone);
 }
 
+/* Where you are. The only ember on the rail, and the only long tick. */
 .current .tick {
-  width: 2.75rem;
+  width: 2.1rem;
   background-color: var(--color-ember);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .link,
-  .name,
-  .tick {
-    transition: none;
-  }
+/*
+ * The name of the section you are in, set vertically alongside the ticks.
+ * Only one label is ever drawn — ten vertical labels would be a wall of type,
+ * and the question the rail answers is "where am I", not "what exists".
+ */
+.label {
+  writing-mode: vertical-rl;
+  font-size: 0.625rem;
+  letter-spacing: 0.42em;
+  /* Vertical letter-spacing leaves a trailing gap that breaks centring. */
+  text-indent: 0.42em;
+  color: var(--color-bone);
+  white-space: nowrap;
+  margin: 0;
+  opacity: 0.75;
+  transition: opacity var(--dur-base) var(--ease-barn);
+}
 
-  /* No hover-to-reveal: every label is simply present. */
-  .name {
-    opacity: 1;
-    translate: 0 0;
+.labelNumber {
+  color: var(--color-rust);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tick,
+  .label {
+    transition: none;
   }
 }

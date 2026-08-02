@@ -100,7 +100,7 @@ export function Arrival() {
 
   return (
     <section id="arrival" ref={sectionRef} className={styles.arrival} aria-label="Arrival">
-      <div className={styles.plate}>
+      <div className={cn(styles.plate, "hud", "hud--bleed")}>
         <picture>
           <source srcSet={ARRIVAL.avif} type="image/avif" />
           <img

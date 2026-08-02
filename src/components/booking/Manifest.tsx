@@ -226,7 +226,7 @@ export function Manifest({
             {departure ? ` · ${formatNight(departure.date)}` : ""}
           </p>
 
-          <div className={styles.sheet}>
+          <div className={cn(styles.sheet, "hud")}>
             <div className={styles.scroller} ref={scrollerRef} tabIndex={0}>
               {!departure ? (
                 <p className={cn("t-record", styles.empty)}>

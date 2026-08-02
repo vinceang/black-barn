@@ -116,7 +116,7 @@ export function TheRite() {
         <div ref={trackRef} className={styles.track}>
           {CHAMBERS.map((chamber, i) => (
             <article key={chamber.numeral} className={styles.chamber}>
-              <div className={styles.plate}>
+              <div className={cn(styles.plate, "hud", "hud--bleed")}>
                 <picture>
                   <source srcSet={chamber.avif} type="image/avif" />
                   <img

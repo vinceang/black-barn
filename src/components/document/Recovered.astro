@@ -17,7 +17,7 @@ import { RECOVERED } from "../../lib/media";
       {
         RECOVERED.map((item) => (
           <figure class="recovered__item">
-            <div class="recovered__frame">
+            <div class="recovered__frame hud hud--tight">
               <picture>
                 <source srcset={item.avif} type="image/avif" />
                 <img class="recovered__img" src={item.jpg} alt={item.alt} loading="lazy" />

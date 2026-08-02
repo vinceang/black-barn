@@ -97,7 +97,7 @@ export function TheBus({ eyebrow }: { eyebrow: string }) {
 
   return (
     <section id="the-bus" className={styles.hero}>
-      <div className={styles.media}>
+      <div className={cn(styles.media, "hud", "hud--bleed")}>
         <picture>
           <source
             media="(orientation: portrait) and (max-width: 47.99rem)"
