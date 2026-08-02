@@ -1,0 +1,84 @@
+{
+  "$schema": "https://design-tokens.org/schema.json",
+  "meta": {
+    "project": "The Black Barn",
+    "version": "1.0.0",
+    "source": "docs/creative-direction.md §2"
+  },
+  "color": {
+    "void":       { "value": "#060505", "comment": "page ground; the space between things" },
+    "ash":        { "value": "#0E0C0B", "comment": "card / panel ground" },
+    "soot":       { "value": "#1A1614", "comment": "elevated surface, dividers" },
+    "wet-wood":   { "value": "#2B211B", "comment": "texture mid-tone, image floors" },
+    "rust":       { "value": "#6B2E19", "comment": "oxidized metal, primary warm structure" },
+    "oxblood":    { "value": "#4A0F12", "comment": "the only red; never bright, never fresh" },
+    "tallow":     { "value": "#E8DCC4", "comment": "primary type; candle-wax white, never pure" },
+    "bone":       { "value": "#C9C2B4", "comment": "secondary type, 70% states" },
+    "ember":      { "value": "#FF8A3D", "comment": "candle/headlight bloom. max 2% of any screen" },
+    "bad-signal": { "value": "#7CFF6B", "comment": "RESTRICTED: dome light, seat counter, restricted cursor only" }
+  },
+  "colorRatio": {
+    "comment": "target distribution per viewport",
+    "void-ash": "78%",
+    "wet-wood-rust": "12%",
+    "tallow-bone": "8%",
+    "ember": "2%",
+    "bad-signal": "<0.5%"
+  },
+  "font": {
+    "invitation": {
+      "role": "display serif — hero lines, section titles, the voice of the Barn",
+      "licensed": ["Canela Deck", "GT Sectra Fine", "Ogg"],
+      "open": ["Instrument Serif", "Newsreader"],
+      "case": "sentence",
+      "tracking": "-0.03em",
+      "leading": "0.88"
+    },
+    "signage": {
+      "role": "condensed heavy sans — wayfinding, tiers, dates, prices, buttons",
+      "licensed": ["Druk Condensed", "Grtsk Peta", "Compressa"],
+      "open": ["Archivo Narrow Black", "Anton"],
+      "case": "uppercase"
+    },
+    "record": {
+      "role": "typewriter mono — FAQ, waivers, timestamps, seat numbers, form labels, errors",
+      "licensed": ["Pitch", "ABC Diatype Mono"],
+      "open": ["Courier Prime", "Martian Mono"],
+      "maxSize": "14px",
+      "tracking": "0.06em",
+      "color": "bone"
+    }
+  },
+  "type": {
+    "hero":    { "value": "clamp(3.25rem, 13vw, 11rem)", "font": "invitation" },
+    "section": { "value": "clamp(2rem, 7vw, 5rem)",      "font": "invitation" },
+    "body":    { "value": "clamp(1rem, 2vw, 1.25rem)",   "font": "invitation" },
+    "label":   { "value": "0.75rem",                      "font": "record" }
+  },
+  "motion": {
+    "easing":       { "value": "cubic-bezier(0.16, 1, 0.3, 1)" },
+    "duration-base":{ "value": "900ms" },
+    "duration-cta": { "value": "400ms", "comment": "button ember bloom" },
+    "splice":       { "value": "84ms",  "comment": "section cut: 2 frames void, 1 frame ember bloom" },
+    "blink":        { "value": "130ms", "comment": "disabled under prefers-reduced-motion" },
+    "lenis-lerp":   { "value": 0.075 },
+    "breathe":      { "value": "1.00 → 1.015 over 9s sine" },
+    "idle-trigger": { "value": "24s" }
+  },
+  "texture": {
+    "grain":  { "opacity": "0.06–0.09", "blend": "screen", "fps": 24, "comment": "one shared plate on every image and video" },
+    "damage": { "usage": "max 20% of assets, hand-placed" },
+    "xerox":  { "usage": "documents only — FAQ, waiver, manifest", "rotation": "0.7deg" }
+  },
+  "prohibited": [
+    "#000000",
+    "#FFFFFF",
+    "bright blood red",
+    "purple",
+    "teal cast",
+    "Halloween orange",
+    "drop shadows",
+    "glassmorphism",
+    "decorative gradients"
+  ]
+}
