@@ -151,6 +151,14 @@ construction.
 §08 is built entirely from takes that lost their selection pass, put through
 five damage treatments. Nothing was generated for it.
 
+### The device gate
+
+The hero was the go/no-go: if §01 does not work on a phone, nothing after it
+matters. It was cleared on real mid-tier Android hardware over 4G on
+2026-08-03 — native scrolling, the gyroscope headlight and tap targets
+confirmed on device rather than in an emulator. A regression there is a
+stop-the-line bug, not a backlog item.
+
 ### Known gaps
 
 - The Blink darkens the viewport at three fixed scroll depths but does not yet
@@ -159,6 +167,7 @@ five damage treatments. Nothing was generated for it.
   live inventory rather than shipping a CSS nudge that fakes it.
 - One line of placeholder copy in the manifest is not in the creative direction
   and needs replacing in-voice.
-- §01 has not been verified on a real mid-tier Android over 4G. That is the
-  go/no-go gate, and touch-dependent behaviour — native scrolling, the
-  gyroscope headlight, tap targets — can only be confirmed there.
+- FAQ items 02 and 08 carry real safety information but do not mention nudity or
+  restraint, which the admission notice above the tiers states plainly. The two
+  layers should agree; the FAQ copy is final per §5, so this needs a decision
+  rather than an edit.

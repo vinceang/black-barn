@@ -32,7 +32,7 @@ Follow this sequence. Do not build sections out of order — each one depends on
 
 1. Token system + Tailwind config + font loading
 2. Layout shell, Lenis, the global grain overlay
-3. `§01 The Bus` hero — **stop here and verify on a real mid-tier Android before continuing.** This is the go/no-go gate.
+3. `§01 The Bus` hero — the go/no-go gate. **Cleared on device 2026-08-03.** A regression here is still a stop-the-line bug: if the hero does not work on a phone, nothing else matters.
 4. `§02 Summons` → `§05 The Rite` (scroll scrub, parallax, splice transitions)
 5. `§06 Passage` → `§07 Manifest` (commerce + form ritual)
 6. `§08 Recovered` → `§10 Notice`
