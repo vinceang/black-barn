@@ -7,11 +7,21 @@
 
 /* ----------------------------------------------------------------- gate -- */
 
+/*
+ * Framed as a control, not a caption.
+ *
+ * It was first set as a hairline rule with 11px type under a 176px headline,
+ * and it disappeared — a disclosure nobody notices does not disclose. A border,
+ * a ground and a little more size make it read as something you can open, which
+ * is the whole point of putting it here.
+ */
 .gate {
   align-self: flex-start;
-  max-width: 30rem;
-  border-top: 1px solid color-mix(in srgb, var(--color-oxblood) 60%, transparent);
-  padding-top: 0.85rem;
+  max-width: 32rem;
+  border: 1px solid color-mix(in srgb, var(--color-oxblood) 85%, transparent);
+  background-color: color-mix(in srgb, var(--color-void) 72%, transparent);
+  backdrop-filter: blur(3px);
+  padding: 0.7rem 0.95rem;
 }
 
 .summary {
@@ -21,8 +31,8 @@
   gap: 0.35rem 0.7rem;
   cursor: pointer;
   list-style: none;
-  color: var(--color-bone);
-  --record-size: 0.6875rem;
+  color: var(--color-tallow);
+  --record-size: 0.75rem;
 }
 
 /* The default triangle is the one part of <details> worth replacing. */
@@ -32,7 +42,9 @@
 
 .tag {
   color: var(--color-oxblood);
-  filter: brightness(2.2);
+  /* Oxblood is deliberately dark; on void it needs lifting to stay legible at
+     this size without becoming the bright red §2.1 prohibits. */
+  filter: brightness(2.6);
   letter-spacing: 0.2em;
   white-space: nowrap;
 }
@@ -52,8 +64,8 @@
 /* A plus that becomes a minus. Cheaper to read than a chevron at this size. */
 .marker {
   position: relative;
-  width: 0.5rem;
-  height: 0.5rem;
+  width: 0.6rem;
+  height: 0.6rem;
   flex: none;
   /* Sits with the prompt, not pushed to the far edge — once the prompt wraps,
      a right-aligned marker reads as belonging to nothing. */
@@ -66,7 +78,7 @@
   position: absolute;
   inset: 0;
   margin: auto;
-  background-color: var(--color-rust);
+  background-color: var(--color-ember);
   transition: transform var(--dur-cta) var(--ease-barn);
 }
 
@@ -82,6 +94,11 @@
 
 .gate[open] .marker::after {
   transform: scaleY(0);
+}
+
+.gate:hover,
+.gate:focus-within {
+  border-color: var(--color-rust);
 }
 
 .panel {
