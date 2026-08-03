@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Grain } from "@/components/texture/Grain";
 import { Headlight } from "./Headlight";
+import { AdmissionStrip } from "./Admission";
 import { HERO } from "@/lib/media";
 import { onThresholdCleared } from "@/lib/signals";
 import { cn } from "@/lib/cn";
@@ -148,6 +149,11 @@ export function TheBus({ eyebrow }: { eyebrow: string }) {
         <Grain variant="media" />
         <div className={styles.scrim} />
       </div>
+
+      {/* The hook only. The full disclosure is its own band below the hero —
+          the whole notice up here took a third of the phone viewport and
+          reduced the bus to a wheel and a door. */}
+      <AdmissionStrip />
 
       <div className={styles.type}>
         <p className={cn("t-record", styles.eyebrow)}>{eyebrow}</p>

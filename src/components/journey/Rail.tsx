@@ -45,9 +45,15 @@ export function Rail() {
     if (!window.matchMedia("(min-width: 64rem) and (pointer: fine)").matches) return;
 
     let frame = 0;
+    // Not every section is a stop — the admission notice sits between §01 and
+    // §02 and is deliberately unlisted. Holding the last match means the rail
+    // keeps naming where you came from instead of snapping back to §01
+    // whenever you cross something it does not index.
+    let held = 0;
+
     const tick = () => {
       const middle = window.innerHeight / 2;
-      let found = 0;
+      let found: number | null = null;
 
       STOPS.forEach((stop, i) => {
         const el = document.getElementById(stop.id);
@@ -56,7 +62,8 @@ export function Rail() {
         if (rect.top <= middle && rect.bottom >= middle) found = i;
       });
 
-      setActive(found);
+      if (found !== null) held = found;
+      setActive(held);
       frame = requestAnimationFrame(tick);
     };
 

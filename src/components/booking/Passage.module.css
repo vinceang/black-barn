@@ -69,7 +69,40 @@
 
 .tierLine {
   margin: 0;
+}
+
+/*
+ * What the tier costs you, as opposed to what it costs. Set below the pitch
+ * and dimmer than it, so the card reads pitch-then-price-then-consequence.
+ */
+.tierWarning {
+  margin: 0;
   flex: 1;
+  color: var(--color-bone);
+  opacity: 0.62;
+  --record-size: 0.6875rem;
+  line-height: 1.8;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-soot);
+}
+
+/*
+ * The refusal. A rubber stamp, not a label — oxblood, letterspaced hard, set
+ * a degree off square so it reads as struck onto the pass rather than printed
+ * with it. §2.4 puts the xerox treatment on documents, and a boarding pass is
+ * a document.
+ */
+.tierStamp {
+  align-self: flex-start;
+  margin: 0.25rem 0 0;
+  padding: 0.5rem 0.8rem;
+  font-size: 0.6875rem;
+  letter-spacing: 0.2em;
+  text-indent: 0.2em;
+  color: var(--color-oxblood);
+  filter: brightness(2.2);
+  border: 1px solid color-mix(in srgb, var(--color-oxblood) 80%, transparent);
+  transform: rotate(-1.4deg);
 }
 
 .claim {

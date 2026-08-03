@@ -1,0 +1,124 @@
+/*
+ * THE HEADER.
+ *
+ * Transparent over the hero, so §01 is never framed by a bar. Once the page
+ * moves it takes a veil — backdrop blur and a hairline — so type passing
+ * underneath is never read through it. Scrolling down it withdraws entirely;
+ * scrolling up it returns.
+ *
+ * It also houses the engine toggle. That control was a lit pill sitting alone
+ * on a black screen, which made enabling audio look like the site's primary
+ * action; docked here it is available without ever presenting itself.
+ */
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.15rem 1.25rem;
+  border-bottom: 1px solid transparent;
+  transition:
+    transform var(--dur-base) var(--ease-barn),
+    background-color var(--dur-base) var(--ease-barn),
+    padding var(--dur-base) var(--ease-barn),
+    border-color var(--dur-base) var(--ease-barn);
+}
+
+@media (min-width: 48rem) {
+  .header {
+    padding: 1.5rem 2.5rem;
+  }
+}
+
+.veiled {
+  background-color: color-mix(in srgb, var(--color-void) 88%, transparent);
+  backdrop-filter: blur(12px);
+  border-bottom-color: var(--color-soot);
+  padding-block: 0.85rem;
+}
+
+.withdrawn {
+  transform: translateY(-102%);
+}
+
+/* ---------------------------------------------------------------- brand -- */
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  color: var(--color-tallow);
+  text-decoration: none;
+}
+
+.mark {
+  width: 1.35rem;
+  height: auto;
+  flex: none;
+  color: var(--color-tallow);
+  opacity: 0.85;
+}
+
+.wordmark {
+  font-size: 0.8125rem;
+  letter-spacing: 0.22em;
+  /* Letter-spacing adds a trailing gap; pull it back so the lockup is even. */
+  margin-right: -0.22em;
+}
+
+/* --------------------------------------------------------------- actions -- */
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+@media (min-width: 48rem) {
+  .actions {
+    gap: 1.5rem;
+  }
+}
+
+.claim {
+  color: var(--color-bone);
+  text-decoration: none;
+  font-size: 0.6875rem;
+  letter-spacing: 0.16em;
+  padding: 0.5rem 0.9rem;
+  border: 1px solid var(--color-soot);
+  transition:
+    color var(--dur-cta) var(--ease-barn),
+    border-color var(--dur-cta) var(--ease-barn);
+}
+
+.claim:hover,
+.claim:focus-visible {
+  color: var(--color-tallow);
+  border-color: var(--color-rust);
+}
+
+/* Hidden on the narrowest screens — §01's own CTA is right there. */
+@media (max-width: 26rem) {
+  .claim {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header {
+    transition: none;
+  }
+
+  /* Never withdraw. A header that disappears on a page you cannot see move
+     is just a header that vanished. */
+  .withdrawn {
+    transform: none;
+  }
+}

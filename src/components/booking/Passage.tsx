@@ -61,6 +61,12 @@ export function Passage({ onSelect }: { onSelect?: (departure: Departure) => voi
 
               <p className={cn("t-record", styles.tierLine)}>{tier.line}</p>
 
+              <p className={cn("t-record", styles.tierWarning)}>{tier.warning}</p>
+
+              {tier.stamp ? (
+                <p className={cn("t-signage", styles.tierStamp)}>{tier.stamp}</p>
+              ) : null}
+
               {tier.request ? (
                 <a className={cn("t-record", styles.request)} href={tier.request.href}>
                   {tier.request.label}

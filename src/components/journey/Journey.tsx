@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import Lenis from "lenis";
 import { Threshold } from "./Threshold";
 import { TheBus } from "./TheBus";
+import { AdmissionNotice } from "./Admission";
 import { Summons } from "./Summons";
 import { TheRoad } from "./TheRoad";
 import { Arrival } from "./Arrival";
@@ -9,7 +10,7 @@ import { TheRite } from "./TheRite";
 import { Phenomena } from "./Phenomena";
 import { Rail } from "./Rail";
 import { Cursor } from "./Cursor";
-import { EngineToggle } from "./EngineToggle";
+import { Header } from "./Header";
 import { motion } from "@/lib/tokens.generated";
 
 /**
@@ -62,6 +63,7 @@ export function Journey({ thresholdLine, eyebrow }: { thresholdLine: string; eye
       <Threshold line={thresholdLine} />
       <main>
         <TheBus eyebrow={eyebrow} />
+        <AdmissionNotice />
         <Summons />
         <TheRoad />
         <Arrival />
@@ -69,10 +71,10 @@ export function Journey({ thresholdLine, eyebrow }: { thresholdLine: string; eye
       </main>
 
       {/* §3.2.4–6, §3.3, §3.2.7 — the layers that sit over everything. */}
+      <Header />
       <Rail />
       <Phenomena />
       <Cursor />
-      <EngineToggle />
     </>
   );
 }

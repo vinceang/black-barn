@@ -2,19 +2,15 @@
  * §3.2.7 — "a persistent, beautiful toggle in the corner".
  * §5.2 / §5.5 — copy: TURN ON THE ENGINE / THE ENGINE IS RUNNING.
  *
- * Persistent, but not competing. On a phone the labelled pill was the only lit
- * object on a black screen, which made the site look as though its primary
- * action were to enable audio — above the actual CTA, and impossible to
- * ignore. So the label is desktop-only; touch gets a bare dot with an
- * accessible name, which is available without ever asking to be looked at.
+ * Persistent, but not competing. As a labelled pill it was the only lit object
+ * on a black screen, which made the site look as though its primary action
+ * were to enable audio. It is now a bare dot docked in the header at every
+ * size, with its name kept for assistive tech — available without ever asking
+ * to be looked at.
  */
 
 .engine {
-  position: fixed;
-  right: 1rem;
-  top: 1rem;
-  bottom: auto;
-  z-index: 70;
+  position: relative;
   display: grid;
   place-items: center;
   width: 2.25rem;
@@ -50,31 +46,12 @@
   white-space: nowrap;
 }
 
-@media (min-width: 48rem) {
-  .engine {
-    right: 2rem;
-    top: auto;
-    bottom: 2rem;
-    width: auto;
-    height: auto;
-    border-radius: 0;
-    padding: 0.7rem 1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.7rem;
-    background-color: color-mix(in srgb, var(--color-void) 78%, transparent);
-    border-color: var(--color-soot);
-    opacity: 0.68;
-  }
-
-  .label {
-    position: static;
-    width: auto;
-    height: auto;
-    overflow: visible;
-    clip-path: none;
-  }
-}
+/*
+ * The label is never drawn, at any size. It exists for assistive tech only.
+ * A written "TURN ON THE ENGINE" made enabling audio look like the thing the
+ * site most wanted from you — §3.2.7 asks for persistent, not insistent, and
+ * a lit dot in the header is both.
+ */
 
 /*
  * The indicator: unlit when off, an ember bloom when running.
