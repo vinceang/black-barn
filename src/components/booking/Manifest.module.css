@@ -70,10 +70,14 @@
   height: 26rem;
   overflow-y: auto;
   overscroll-behavior: contain;
-  /* Hidden. A visible bar advertises a control, and while the drift was
-     overwriting scrollTop that control appeared broken. The list is still
-     scrollable by wheel, drag, touch and keyboard. */
-  scrollbar-width: none;
+  /*
+   * A hairline bar, in palette. It was hidden while the control genuinely did
+   * not work — advertising a scroll area that refuses to scroll is worse than
+   * hiding it. Now that the wheel reaches the list, the affordance earns its
+   * place: without it there is nothing to say the sheet continues.
+   */
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--color-bone) 26%, transparent) transparent;
   mask-image: linear-gradient(
     to bottom,
     transparent 0,
@@ -84,7 +88,15 @@
 }
 
 .scroller::-webkit-scrollbar {
-  display: none;
+  width: 2px;
+}
+
+.scroller::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scroller::-webkit-scrollbar-thumb {
+  background-color: color-mix(in srgb, var(--color-bone) 26%, transparent);
 }
 
 .rows {

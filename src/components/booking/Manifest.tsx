@@ -227,7 +227,22 @@ export function Manifest({
           </p>
 
           <div className={cn(styles.sheet, "hud")}>
-            <div className={styles.scroller} ref={scrollerRef} tabIndex={0}>
+            <div
+              className={styles.scroller}
+              ref={scrollerRef}
+              tabIndex={0}
+              role="group"
+              aria-label="Seats on this departure"
+              /*
+               * Lenis hijacks wheel events for the whole document, so a nested
+               * scrollable only keeps its own scrolling if it is marked. Without
+               * this the wheel scrolled the page straight past the sheet and the
+               * list never moved — it looked like a scroll area that refused to
+               * scroll. globals.css already styled for this attribute; the
+               * attribute itself was simply never added.
+               */
+              data-lenis-prevent
+            >
               {!departure ? (
                 <p className={cn("t-record", styles.empty)}>
                   select a departure and the manifest for that night will be shown.
