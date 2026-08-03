@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import Lenis from "lenis";
 import { Threshold } from "./Threshold";
 import { TheBus } from "./TheBus";
-import { AdmissionNotice } from "./Admission";
 import { Summons } from "./Summons";
 import { TheRoad } from "./TheRoad";
 import { Arrival } from "./Arrival";
@@ -63,7 +62,6 @@ export function Journey({ thresholdLine, eyebrow }: { thresholdLine: string; eye
       <Threshold line={thresholdLine} />
       <main>
         <TheBus eyebrow={eyebrow} />
-        <AdmissionNotice />
         <Summons />
         <TheRoad />
         <Arrival />

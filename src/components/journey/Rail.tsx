@@ -45,10 +45,10 @@ export function Rail() {
     if (!window.matchMedia("(min-width: 64rem) and (pointer: fine)").matches) return;
 
     let frame = 0;
-    // Not every section is a stop — the admission notice sits between §01 and
-    // §02 and is deliberately unlisted. Holding the last match means the rail
-    // keeps naming where you came from instead of snapping back to §01
-    // whenever you cross something it does not index.
+    // Not every scroll position lands inside a stop — the seams between
+    // sections, and §07's sticky run, both leave the midline covering nothing
+    // the rail indexes. Holding the last match means it keeps naming where you
+    // came from instead of snapping back to §01.
     let held = 0;
 
     const tick = () => {

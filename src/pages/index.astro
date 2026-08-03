@@ -46,3 +46,24 @@ const eyebrow = `${formatNight(SEASON.start)} — ${formatNight(SEASON.end)} · 
   {/* §2.4 — the plate sits above the page and below nothing. */}
   <Grain variant="global" />
 </Base>
+
+{/*
+  The admission notice opens when linked to. This is inline rather than an
+  effect inside <AdmissionNotice /> because §06 is client:visible: a reader
+  following the link from §01 would otherwise land on a shut box and wait for
+  hydration to catch up. The element is server-rendered, so this runs first.
+*/}
+<script is:inline>
+  (() => {
+    const reveal = () => {
+      if (location.hash !== "#admission") return;
+      const el = document.getElementById("admission");
+      if (!el) return;
+      el.open = true;
+      // scroll-margin-top on the element clears the fixed header.
+      el.scrollIntoView({ block: "start" });
+    };
+    reveal();
+    addEventListener("hashchange", reveal);
+  })();
+</script>

@@ -3,6 +3,7 @@ import { TIERS } from "@/lib/tiers";
 import { listDepartures } from "@/lib/seats/api";
 import type { Departure } from "@/lib/seats/types";
 import { formatNight } from "@/lib/season";
+import { AdmissionNotice } from "./AdmissionNotice";
 import { cn } from "@/lib/cn";
 import styles from "./Passage.module.css";
 
@@ -49,6 +50,9 @@ export function Passage({ onSelect }: { onSelect?: (departure: Departure) => voi
     <section id="passage" className={styles.passage}>
       <div className={styles.inner}>
         <p className={cn("t-record", styles.eyebrow)}>PASSAGE</p>
+
+        {/* The warning belongs immediately above the thing it qualifies. */}
+        <AdmissionNotice />
 
         <div className={styles.tiers}>
           {TIERS.map((tier) => (
