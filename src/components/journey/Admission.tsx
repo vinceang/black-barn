@@ -4,17 +4,23 @@ import styles from "./Admission.module.css";
 /**
  * THE ADMISSION NOTICE — in two parts.
  *
- * The whole notice was first bolted across the top of §01 and took a third of
- * the phone viewport, reducing the hero to a wheel and a door. The thesis shot
- * should not pay for the disclaimer, and the disclaimer should not be crammed.
+ * PART ONE is a closed disclosure sitting immediately above §01's CTA, so the
+ * warning is attached to the decision it qualifies. It began as a strip across
+ * the top of the hero and that was wrong twice over: it took a third of the
+ * phone viewport, and a row of monospace words at the top of a page reads as
+ * navigation — which made "nudity" scan as a nav link rather than a content
+ * warning. Closed by default, the terms are only ever shown to someone who
+ * asked for them.
  *
- * So the hook goes on the hero — four words and a rule, enough to change what
- * you think you are looking at — and the disclosure gets its own band directly
- * beneath, with room to be read.
+ * Native <details>. Progressive disclosure is exactly what the element is for:
+ * it is keyboard-operable, announces its own expanded state, and is findable
+ * by in-page search even while shut, with no script at all.
+ *
+ * PART TWO is the full disclosure, further down, where it has room to be read.
  *
  * NOTE ON AUTHORSHIP: this copy is not in docs/creative-direction.md §5. It was
  * written to brief and should be treated as replaceable, unlike §5's copy which
- * is final. The consent sentence deliberately mirrors §5.4.02 so the two cannot
+ * is final. The consent sentences deliberately mirror §5.4.02 so the two cannot
  * drift apart.
  *
  * It discloses in words only. §2.6's hard line — nothing explicit, no restraint
@@ -24,28 +30,42 @@ import styles from "./Admission.module.css";
 /** The terms, as a list. Set as a run of middots so the eye counts them. */
 const TERMS = ["restraint", "nudity", "ritual", "total darkness"] as const;
 
-/** Sits inside §01, under the header. Four words and a rule. */
-export function AdmissionStrip() {
+/**
+ * Sits directly above §01's CTA. Shut, it is a label on a decision; open, it
+ * is the shortest honest answer to what that decision involves.
+ */
+export function AdmissionGate() {
   return (
-    <aside className={styles.strip} aria-label="Admission notice">
-      <p className={cn("t-signage", styles.stripHeading)}>Admission notice · 18+</p>
-      <p className={cn("t-record", styles.stripTerms)}>
-        {TERMS.map((term, i) => (
-          <span key={term}>
-            {i > 0 ? <span className={styles.dot}> · </span> : null}
-            {term}
-          </span>
-        ))}
-      </p>
-      <a className={cn("t-record", styles.stripMore)} href="#admission">
-        what this means
-      </a>
-    </aside>
+    <details className={styles.gate}>
+      <summary className={cn("t-record", styles.summary)}>
+        <span className={styles.tag}>Admission notice · 18+</span>
+        <span className={styles.prompt}>what you are agreeing to</span>
+        <span className={styles.marker} aria-hidden="true" />
+      </summary>
+
+      <div className={styles.panel}>
+        <p className={cn("t-record", styles.terms)}>
+          {TERMS.map((term, i) => (
+            <span key={term}>
+              {i > 0 ? <span className={styles.dot}> · </span> : null}
+              {term}
+            </span>
+          ))}
+        </p>
+        <p className={cn("t-record", styles.gateLine)}>
+          Consent is taken at boarding and may be withdrawn at any point, from any Usher,
+          without discussion.
+        </p>
+        <a className={cn("t-record", styles.gateMore)} href="#admission">
+          the full notice
+        </a>
+      </div>
+    </details>
   );
 }
 
 /**
- * The full disclosure, directly below the hero.
+ * The full disclosure, below the hero.
  *
  * Everything before the last sentence is a reason to stay away. The closing
  * figure is other people going anyway, which is what turns a warning into
